@@ -1,0 +1,48 @@
+@mixin mat-icon-size($size) {
+  height: $size;
+  width: $size;
+  font-size: $size;
+  line-height: $size;
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.bes-summary-bar-container {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  height: 64px;
+}
+
+.bes-item-link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.bes-summary-item {
+  border-right-style: solid;
+  border-right-width: 1px;
+  padding: 0 24px;
+  overflow: hidden;
+
+  .bes-summary-item-value {
+    word-break: break-all;
+  }
+
+  span:focus {
+    outline: none;
+  }
+
+  button {
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+  }
+
+  mat-icon {
+    margin-right: 3px;
+    @include mat-icon-size(16px);
+  }
+}

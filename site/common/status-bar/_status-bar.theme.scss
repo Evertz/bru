@@ -1,0 +1,36 @@
+@mixin app-status-bar-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+
+  $success-color: #66bb6a;
+
+  bes-status-bar {
+    .bes-status-container {
+      background-color: mat-color($background, app-bar);
+      border-bottom-color: mat-color($foreground, divider);
+    }
+
+    .bes-status {
+      &-success {
+        border-top-color: $success-color;
+        background-color: rgba($success-color, .10);
+      }
+      &-interrupted,
+      &-failed {
+        border-top-color: mat-color($warn);
+        background-color: mat-color($warn, .10);
+      }
+      &-unstable {
+        border-top-color: mat-color($warn, lighter);
+        background-color: mat-color($primary, lighter, .10);
+      }
+      &-running {
+        border-top-color: mat-color($primary);
+        background-color: mat-color($primary, .10);
+      }
+    }
+  }
+
+}

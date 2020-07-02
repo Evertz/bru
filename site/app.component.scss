@@ -1,0 +1,28 @@
+.bes-app-toolbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: .2s width;
+
+  mat-toolbar {
+    height: 48px;
+  }
+
+  .bes-app-title {
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    span {
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+mat-sidenav-container {
+}

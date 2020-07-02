@@ -1,0 +1,21 @@
+<div class="bes-label-log-loading-container"
+     fxLayout="row"
+     fxLayoutAlign="center center"
+     *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<mat-list dense fxLayout="column" fxFlex>
+  <cdk-virtual-scroll-viewport itemSize="30" fxLayout="column" fxFlex minBufferPx="400" maxBufferPx="600">
+    <div *cdkVirtualFor="let line of log$ | async; let i = index;"
+         fxLayout="row" fxLayoutAlign="start center">
+      <a class="bes-log-gutter-link" [routerLink]="['.']" [fragment]="'line-'+ (i + 1)">
+        <div class="bes-log-gutter" fxLayout="row" [ngClass]="{ 'bes-log-gutter-selected': fragment === i }"
+             fxLayoutAlign="end center" id="line-{{ i + 1 }}">
+          {{ i + 1 }}
+        </div>
+      </a>
+      <mat-list-item class="bes-log-item" [ngClass]="{ 'bes-log-item-selected': fragment === i }">{{ line }}</mat-list-item>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</mat-list>

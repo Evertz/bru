@@ -1,0 +1,22 @@
+@mixin app-summary-bar-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+
+  bes-summary-bar {
+    .bes-summary-bar-container {
+      background-color: mat-color($background, app-bar);
+      border-bottom-color: mat-color($foreground, divider);
+
+      .bes-summary-item {
+        border-right-color: mat-color($foreground, divider);
+      }
+
+      mat-icon.bes-summary-icon {
+        color: mat-color($foreground, divider);
+      }
+    }
+  }
+
+}

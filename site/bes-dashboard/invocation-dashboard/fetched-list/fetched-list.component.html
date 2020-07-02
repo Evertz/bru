@@ -1,0 +1,8 @@
+<mat-nav-list dense fxLayout="column" fxFlex>
+  <cdk-virtual-scroll-viewport itemSize="30" fxLayout="column" fxFlex minBufferPx="400" maxBufferPx="600">
+    <div *cdkVirtualFor="let item of fetched$ | async">
+      <a mat-list-item [href]="item.url">{{ item.url }}</a>
+      <mat-divider></mat-divider>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</mat-nav-list>

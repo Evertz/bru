@@ -1,0 +1,9 @@
+@mixin app-theme($theme) {
+  bes-root {
+    .bes-app-toolbar {
+      mat-toolbar.mat-toolbar.mat-primary {
+        color: #fff;
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.bes-status-container {
+  padding: 0 24px;
+  height: 30px;
+
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+.bes-status-container:not(.bes-status-running):not(.bes-status-queued) {
+  border-top-style: solid;
+  border-top-width: 4px;
+}

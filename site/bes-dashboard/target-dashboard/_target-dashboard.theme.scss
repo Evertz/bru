@@ -1,0 +1,14 @@
+@mixin app-target-dashboard-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+
+  bes-target-dashboard {
+    .bes-welcome-container {
+      mat-icon {
+        color: mat-color($primary, default, .56);
+      }
+    }
+  }
+}

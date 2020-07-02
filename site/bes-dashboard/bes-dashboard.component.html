@@ -1,0 +1,9 @@
+<bes-info-header [items]="infoheader$ | async"></bes-info-header>
+
+<bes-status-bar *ngIf="(metadata$ | async) as metadata"
+                [status]="metadata.exitCode ? metadata.exitCode.name.toLowerCase() : 'running'"
+                [indeterminate]="!metadata.finishTimeMillis"
+                [title]="metadata.command | titlecase">
+</bes-status-bar>
+
+<router-outlet></router-outlet>

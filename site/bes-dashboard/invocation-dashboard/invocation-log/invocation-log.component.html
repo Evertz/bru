@@ -1,0 +1,10 @@
+<div class="bes-invocation-log">
+  <cdk-virtual-scroll-viewport itemSize="24" minBufferPx="400" maxBufferPx="600">
+    <div class="bes-invocation-log-line" *cdkVirtualFor="let line of log$ | async; let i = index;" fxLayout="row" fxLayoutAlign="start center">
+      <div class="bes-invocation-log-gutter" fxLayout="row" fxLayoutAlign="end center">
+        <a [routerLink]="['.']" [fragment]="''+ (i + 1)">{{ i + 1 }}</a>
+      </div>
+      <div class="bes-invocation-log-item" [innerHTML]="line"></div>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</div>

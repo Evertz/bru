@@ -1,0 +1,10 @@
+@mixin app-bes-dashboard-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+
+  bes-dashboard {
+
+  }
+}

@@ -1,0 +1,46 @@
+.bes-invocation-log {
+  text-decoration: none;
+  font-family: monospace;
+  line-height: 24px;
+  white-space: pre;
+
+  cdk-virtual-scroll-viewport {
+    height: calc(100vh - 251px);
+  }
+
+  &-line {
+    height: 24px;
+  }
+
+  &-gutter {
+    height: 24px;
+    width: 50px;
+    padding: 0 6px;
+    margin-right: 12px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  &-item {
+    display: inline-flex;
+  }
+}
+
+.bes-log-stb-container {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+}
+
+a.bes-log-gutter-link {
+  text-decoration: none;
+  font-family: monospace;
+  font-size: .9em;
+}
+

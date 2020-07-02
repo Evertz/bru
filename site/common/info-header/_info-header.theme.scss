@@ -1,0 +1,20 @@
+@mixin app-info-header-theme($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+
+  bes-info-header {
+    .bes-info-header-container {
+      background-color: mat-color($background, app-bar);
+      border-bottom-color: mat-color($foreground, divider);
+
+      .bes-info-header-item-sep {
+        mat-icon {
+          color: mat-color($foreground, divider);
+        }
+      }
+    }
+  }
+
+}

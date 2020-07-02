@@ -1,0 +1,34 @@
+@mixin mat-icon-size($size) {
+  height: $size;
+  width: $size;
+  font-size: $size;
+  line-height: $size;
+}
+
+:host {
+  display: block;
+}
+
+.bes-info-header-container {
+  padding: 0 24px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  height: 60px;
+
+  span:focus {
+    outline: none;
+  }
+
+  .bes-item-link {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  mat-icon {
+    @include mat-icon-size(6px);
+  }
+
+  a {
+    color: inherit;
+  }
+}

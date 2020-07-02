@@ -1,0 +1,27 @@
+<div class="bes-app-toolbar mat-elevation-z2">
+  <mat-toolbar color="primary">
+    <div class="bes-app-title" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="12px">
+      <img src="assets/bazel-navbar.svg" alt="Bazel Logo">
+      <span [routerLink]="['/']">Build Status</span>
+      <span *ngIf="isDevMode">(DEV)</span>
+    </div>
+    <span fxFlex></span>
+    <div>
+      <mat-menu #headerMenu="matMenu">
+        <button mat-menu-item (click)="onSupportClick('send feedback')">Send feedback</button>
+        <button mat-menu-item (click)="onSupportClick('report issues')">Report an issue</button>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="headerMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+</div>
+
+<mat-sidenav-container>
+  <mat-sidenav></mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

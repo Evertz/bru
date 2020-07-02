@@ -1,0 +1,9 @@
+@import './info-header/info-header.theme';
+@import './summary-bar/summary-bar.theme';
+@import './status-bar/status-bar.theme';
+
+@mixin app-common-theme($theme) {
+  @include app-info-header-theme($theme);
+  @include app-summary-bar-theme($theme);
+  @include app-status-bar-theme($theme);
+}

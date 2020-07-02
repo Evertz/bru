@@ -1,0 +1,25 @@
+<bes-summary-bar [items]="metadata$ | async">
+  <bes-summary-item align="start">
+    <ng-container besSummaryTitle>Duration</ng-container>
+    <ng-container besSummaryValue>{{ duration$ | async }}</ng-container>
+  </bes-summary-item>
+</bes-summary-bar>
+
+<div class="bes-wrapper" fxLayout="column">
+  <div>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.path"
+         routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+  </div>
+  <router-outlet (activate)="routeActivated = true" (deactivate)="routeActivated = false"></router-outlet>
+  <div *ngIf="!routeActivated" class="bes-welcome-container" fxLayout="column" fxLayoutAlign="center center">
+    <mat-icon>search</mat-icon>
+    <p>Select a tab to view further invocation details</p>
+  </div>
+</div>
