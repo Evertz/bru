@@ -1,12 +1,12 @@
 import { Global, Module, Provider } from '@nestjs/common';
 
-import { RegisteredHandlers } from './handlers/bep-handler';
+import { RegisteredHandlers } from './handlers/invocation-handler';
 import { BuildEventStreamProtoRootProvider } from './build-event-stream-proto-root';
 import { BesController } from './bes.controller';
-import { DefaultBepHandler } from './handlers/default-bep-handler';
+import { DefaultInvocationHandler } from './handlers/default-invocation-handler.service';
 
 const Handlers = [
-  DefaultBepHandler
+  DefaultInvocationHandler
 ];
 
 const HandlersProvider: Provider = {

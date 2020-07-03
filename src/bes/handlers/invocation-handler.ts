@@ -1,23 +1,22 @@
-import { Observable } from 'rxjs';
-
 import { InvocationAttemptFinished, InvocationAttemptStarted, StreamId } from '../../../types/messages/build-events';
 import { BuildEvent } from '../../../types/messages/build-event-steam';
 import { Invocation } from '../../../types/invocation-ref';
+import { Observable } from 'rxjs';
 
 
 export const RegisteredHandlers = Symbol.for('RegisteredHandlers');
 
 /**
- * Interface for all handlers, that is, a class that can handle events from the Build Event Protocol
+ * Interface for all invocation handlers, that is, a class that can handle events from the Build Event Protocol
  *
  * A handler may be responsible for keeping data cached in memory for querying, or for persisting data to a DB or other
- * storage
+ * storage, and generally acting as a proxy between the raw BuildEvent and the transform InvocationRef
  *
  * Handlers also act as data sources for those who need to query an invocation. The data returned may depend on the
  * underlying implementation of the handler (eg, a handler dealing with persistence may not return the latest data, if
  * new data is still streaming in)
  */
-export interface BepHandler {
+export interface InvocationHandler {
   /**
    * Notify the handler that an invocation has started
    */
@@ -42,6 +41,12 @@ export interface BepHandler {
    * Returns the 'latest' data (as known by this handler) about the given invocation
    */
   queryFor(invocationId: string): Invocation;
+
+  /**
+   * Registers for a stream of the raw build events for the given invocation that is in flight
+   * For completed invocations, this returns a stopped observable
+   */
+  registerForEvents(invocationId: string): Observable<BuildEvent>;
 }
 
 /**

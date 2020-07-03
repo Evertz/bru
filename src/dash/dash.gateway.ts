@@ -10,7 +10,7 @@ import {
 } from 'rxjs/operators';
 import * as chunk from 'lodash.chunk';
 
-import { DefaultBepHandler } from '../bes/handlers/default-bep-handler';
+import { DefaultInvocationHandler } from '../bes/handlers/default-invocation-handler.service';
 import { Target } from '../../types/invocation-ref';
 import { BesEventFactory, EventType } from '../../types/events';
 
@@ -19,7 +19,7 @@ import { BesEventFactory, EventType } from '../../types/events';
 export class DashGateway {
   private static readonly UPDATE_INTERVAL = 1000;
 
-  constructor(private readonly handler: DefaultBepHandler) {}
+  constructor(private readonly handler: DefaultInvocationHandler) {}
 
   @SubscribeMessage('subscribe/targets')
   onSubscribeToTargets(@MessageBody() data: { invocationId: string }): Observable<WsResponse> {

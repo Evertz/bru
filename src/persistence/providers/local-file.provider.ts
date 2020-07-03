@@ -1,16 +1,21 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
-import { PersistenceProvider } from '../persistence.provider';
+import { PersistenceProvider, PERSISTENCE_PROVIDER_CONFIG } from '../persistence.provider';
 import { StreamId } from '../../../types/messages/build-events';
 import { BuildEvent } from '../../../types/messages/build-event-steam';
 import { InvocationRef } from '../../../types/invocation-ref';
 
+export interface LocalFileProviderConfig {
+  base: string;
+}
+
 @Injectable()
 export class LocalFilePersistenceProvider extends PersistenceProvider {
-  constructor() {
+  constructor(@Inject(PERSISTENCE_PROVIDER_CONFIG)
+              private readonly config: LocalFileProviderConfig) {
     super();
   }
 
@@ -53,7 +58,7 @@ export class LocalFilePersistenceProvider extends PersistenceProvider {
   }
 
   private makePathFor(invocationId: string, ...extra: string[]): string {
-    return path.join(process.cwd(), 'storage', 'invocations', invocationId, ...extra);
+    return path.join(process.cwd(), this.config.base, 'invocations', invocationId, ...extra);
   }
 
   fetchBuildEvents(streamId: StreamId): BuildEvent[] {

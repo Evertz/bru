@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 
-import { DefaultBepHandler } from '../bes/handlers/default-bep-handler';
+import { DefaultInvocationHandler } from '../bes/handlers/default-invocation-handler.service';
 import { BesEventData, BesEventFactory, EventType } from '../../types/events';
 import {
   HostDetails, Invocation,
@@ -12,7 +12,7 @@ import {
 @Controller('/v1/query')
 export class DashController {
 
-  constructor(private readonly handler: DefaultBepHandler) {}
+  constructor(private readonly handler: DefaultInvocationHandler) {}
 
   @Get(':invocation/workspacestatus')
   async getInvocationWorkspaceStatus(@Param('invocation') invocationId: string): Promise<BesEventData<WorkspaceStatusItems>> {

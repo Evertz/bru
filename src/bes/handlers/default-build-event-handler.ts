@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 
-import { BuildEventHandler } from './bep-handler';
+import { BuildEventHandler } from './invocation-handler';
 import { Invocation } from '../../../types/invocation-ref';
 import { StreamId } from '../../../types/messages/build-events';
 import { BuildEvent, TestSize, TestStatus } from '../../../types/messages/build-event-steam';

@@ -1,49 +1,54 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { ReplaySubject, Subject } from 'rxjs';
+import { EMPTY, Observable, Subject } from 'rxjs';
 
-import { BepHandler } from './bep-handler';
-import { DefaultBuildEventHandler } from './build-event-handler';
+import { InvocationHandler } from './invocation-handler';
+import { DefaultBuildEventHandler } from './default-build-event-handler';
 import { Invocation } from '../../../types/invocation-ref';
 import { InvocationAttemptFinished, InvocationAttemptStarted, StreamId } from '../../../types/messages/build-events';
 import { BuildEvent } from '../../../types/messages/build-event-steam';
 import { PersistenceService } from '../../persistence/persistence.service';
 
 @Injectable()
-export class DefaultBepHandler implements BepHandler {
-  private readonly logger = new Logger(DefaultBepHandler.name);
+export class DefaultInvocationHandler implements InvocationHandler {
+  private readonly logger = new Logger(DefaultInvocationHandler.name);
 
-  // invocationId -> InvocationRef
+  // invocationId -> Invocation
   private readonly data: Map<string, Invocation> = new Map();
-  private readonly buildEventStreams: Map<string, ReplaySubject<BuildEvent>> = new Map();
+  // invocationId -> observable of bazel build events
+  private readonly buildEventStreams: Map<string, Subject<BuildEvent>> = new Map();
 
   private buildEventHandler = new DefaultBuildEventHandler(true);
 
-  constructor(private readonly persistenceService: PersistenceService) {}
+  constructor(private readonly persistenceService: PersistenceService) {
+    setInterval(() => this.logProcessStats(), 1000 * 30);
+  }
 
   notifyInvocationStarted(streamId: StreamId, event: InvocationAttemptStarted): void {
     this.logger.log(`Starting streaming ref '${streamId.invocationId}'`);
+    this.logProcessStats();
 
     const invocation = Invocation.init(streamId.invocationId);
 
     this.data.set(streamId.invocationId, invocation);
 
-    const buildEvent$ = new ReplaySubject<BuildEvent>(1);
+    const buildEvent$ = new Subject<BuildEvent>();
     this.buildEventStreams.set(streamId.invocationId, buildEvent$);
 
-    this.persistenceService.startPersistenceSessionForInvocation(invocation, buildEvent$);
+    this.persistenceService.startPersistenceSessionForInvocation(invocation, buildEvent$.asObservable());
   }
 
   notifyInvocationFinished(streamId: StreamId, event: InvocationAttemptFinished): void {
     if (!this.data.has(streamId.invocationId)) { return; }
-
-    this.logger.log(`Disposed of streaming ref '${streamId.invocationId}'`);
 
     this.data.get(streamId.invocationId).dispose();
     this.buildEventStreams.get(streamId.invocationId).complete();
 
     this.data.delete(streamId.invocationId);
     this.buildEventStreams.delete(streamId.invocationId);
+
+    this.logger.log(`Disposed of streaming ref '${streamId.invocationId}'`);
+    this.logProcessStats();
   }
 
   handleBuildEvent(streamId: StreamId, event: BuildEvent, sequenceNumber: number): void {
@@ -66,8 +71,13 @@ export class DefaultBepHandler implements BepHandler {
     if (event.id.structuredCommandLine) { this.buildEventHandler.handleStructuredCommandLine(invocation, streamId, event); }
     if (event.id.unstructuredCommandLine) { this.buildEventHandler.handleUnstructuredCommandLine(invocation, streamId, event); }
 
-    // now that it's been handled, forward to any proxies (eg, persistence layers)
-    this.buildEventStreams.get(streamId.invocationId).next(event);
+    if (this.buildEventStreams.has(streamId.invocationId)) {
+      // now that it's been handled, forward to any proxies (eg, persistence layers)
+      const stream = this.buildEventStreams.get(streamId.invocationId);
+      if (!stream.closed) {
+        this.buildEventStreams.get(streamId.invocationId).next(event);
+      }
+    }
   }
 
   queryFor(invocationId: string): Invocation {
@@ -79,5 +89,19 @@ export class DefaultBepHandler implements BepHandler {
         return Invocation.fromRef(ref);
       }
     }
+  }
+
+  registerForEvents(invocationId: string): Observable<BuildEvent> {
+    if (this.buildEventStreams.has(invocationId)) {
+      return this.buildEventStreams.get(invocationId).asObservable();
+    }
+
+    return EMPTY;
+  }
+
+  private logProcessStats() {
+    const mem = process.memoryUsage();
+    const proc = process.cpuUsage();
+    this.logger.verbose(`Memory heap used: ${mem.heapUsed}, heap total ${mem.heapTotal}, rss ${mem.rss}, cpu userland: ${proc.user}`);
   }
 }

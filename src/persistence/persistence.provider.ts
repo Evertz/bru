@@ -4,6 +4,8 @@ import { BuildEvent } from '../../types/messages/build-event-steam';
 import { StreamId } from '../../types/messages/build-events';
 import { InvocationRef } from '../../types/invocation-ref';
 
+export const PERSISTENCE_PROVIDER_CONFIG = Symbol.for('PersistenceProviderConfig');
+
 /**
  * Provider class that provides an abstraction over the persistent storage used for invocation data
  * The caller should not have to handle storage implementations via this interface

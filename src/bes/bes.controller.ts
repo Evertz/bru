@@ -3,7 +3,7 @@ import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 import { Observable, Subject } from 'rxjs';
 
 
-import { BepHandler, RegisteredHandlers } from './handlers/bep-handler';
+import { InvocationHandler, RegisteredHandlers } from './handlers/invocation-handler';
 import { BuildEventStreamProtoRoot } from './build-event-stream-proto-root';
 import {
   PublishBuildEvent,
@@ -16,19 +16,16 @@ import { BuildEvent } from '../../types/messages/build-event-steam';
 @Controller()
 export class BesController implements PublishBuildEvent {
   constructor(private readonly eventStreamProtoRoot: BuildEventStreamProtoRoot,
-              @Inject(RegisteredHandlers) private readonly proxies: BepHandler[]) {}
+              @Inject(RegisteredHandlers) private readonly proxies: InvocationHandler[]) {}
 
   @GrpcMethod('PublishBuildEvent', 'PublishLifecycleEvent')
   publishLifecycleEvent(data: PublishLifecycleEventRequest) {
     if (data.buildEvent.event.invocationAttemptStarted) {
-      this.notifyHandlers(
-        'notifyInvocationStarted',
-        [data.buildEvent.streamId, data.buildEvent.event.invocationAttemptStarted]
-      );
+      process.nextTick(() =>
+        this.proxies.forEach(proxy => proxy.notifyInvocationStarted(data.buildEvent.streamId, data.buildEvent.event.invocationAttemptStarted)));
     } else if (data.buildEvent.event.invocationAttemptFinished) {
-      this.notifyHandlers('notifyInvocationFinished',
-        [data.buildEvent.streamId, data.buildEvent.event.invocationAttemptFinished]
-      );
+      process.nextTick(() =>
+        this.proxies.forEach(proxy => proxy.notifyInvocationFinished(data.buildEvent.streamId, data.buildEvent.event.invocationAttemptFinished)));
     }
 
     // we don't care about the other events
@@ -58,7 +55,8 @@ export class BesController implements PublishBuildEvent {
         const BazelBuildEvent = this.eventStreamProtoRoot.lookupType('BuildEvent');
         const bazelEvent = BazelBuildEvent.decode(anyBazelEvent.value) as unknown as BuildEvent;
 
-        this.notifyHandlers('handleBuildEvent', [streamId, bazelEvent, sequenceNumber]);
+        process.nextTick(() =>
+          this.proxies.forEach(proxy => proxy.handleBuildEvent(streamId, bazelEvent, sequenceNumber)));
       }
 
     }, err => {
@@ -77,15 +75,5 @@ export class BesController implements PublishBuildEvent {
     });
 
     return resp$.asObservable();
-  }
-
-  private notifyHandlers(method: string, args: any[]) {
-    // notify proxies on the next VM turn, so as to not block handling
-    // from each proxy
-    process.nextTick(() => {
-      this.proxies.forEach(proxy => {
-        (proxy[method] as Function).apply(proxy, args);
-      });
-    });
   }
 }
