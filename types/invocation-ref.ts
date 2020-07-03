@@ -285,18 +285,21 @@ export interface InvocationRef {
 }
 
 export class Invocation {
-  public ref: InvocationRef;
   public state = 'started';
 
   private _change$ = new Subject<BesEvent<any>>();
 
-  constructor() {}
+  constructor(public ref?: InvocationRef) {}
 
   static init(invocationId: string): Invocation {
     const invocation = new Invocation();
     invocation.init(invocationId);
 
     return invocation;
+  }
+
+  static fromRef(ref: InvocationRef): Invocation {
+    return new Invocation(ref);
   }
 
   dispose() {
@@ -363,6 +366,10 @@ export class Invocation {
 
   notifyFetchedChanged(fetched: FetchedResource) {
     this._notifyChange(EventType.FETCHED_EVENT, fetched);
+  }
+
+  get changes$(): Observable<BesEvent<any>> {
+    return this._change$.asObservable();
   }
 
   get details$(): Observable<InvocationDetails> {

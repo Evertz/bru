@@ -225,7 +225,6 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
   }
 
   handleFetch(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
-    console.log('Handling fetch', event.id.fetch);
     const resource = { url: event.id.fetch.url, success: event.fetch.success };
 
     invocation.ref.fetched.push(resource);

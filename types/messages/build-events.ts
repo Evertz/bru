@@ -23,14 +23,14 @@ export enum BuildComponent {
 // Unique identifier for a build event stream.
 export interface StreamId {
   // The id of a Build message.
-  buildId: string;
+  buildId?: string;
 
   // The unique invocation ID within this build.
   // It should be the same as {invocation} (below) during the migration.
   invocationId: string;
 
   // The component that emitted this event.
-  component: BuildComponent;
+  component?: BuildComponent;
 }
 
 // The type of console output stream.

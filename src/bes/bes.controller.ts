@@ -49,7 +49,8 @@ export class BesController implements PublishBuildEvent {
         streamId = publishRequest.orderedBuildEvent.streamId;
       }
 
-      acks.push(publishRequest.orderedBuildEvent.sequenceNumber.toNumber());
+      const sequenceNumber = publishRequest.orderedBuildEvent.sequenceNumber.toNumber();
+      acks.push(sequenceNumber);
 
       if (publishRequest.orderedBuildEvent.event.hasOwnProperty('bazelEvent')) {
         const anyBazelEvent = publishRequest.orderedBuildEvent.event.bazelEvent;
@@ -57,7 +58,7 @@ export class BesController implements PublishBuildEvent {
         const BazelBuildEvent = this.eventStreamProtoRoot.lookupType('BuildEvent');
         const bazelEvent = BazelBuildEvent.decode(anyBazelEvent.value) as unknown as BuildEvent;
 
-        this.notifyHandlers('handleBuildEvent', [streamId, bazelEvent]);
+        this.notifyHandlers('handleBuildEvent', [streamId, bazelEvent, sequenceNumber]);
       }
 
     }, err => {
@@ -81,10 +82,10 @@ export class BesController implements PublishBuildEvent {
   private notifyHandlers(method: string, args: any[]) {
     // notify proxies on the next VM turn, so as to not block handling
     // from each proxy
-    setTimeout(() => {
+    process.nextTick(() => {
       this.proxies.forEach(proxy => {
         (proxy[method] as Function).apply(proxy, args);
       });
-    }, 0);
+    });
   }
 }

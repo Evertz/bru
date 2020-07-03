@@ -36,7 +36,7 @@ export interface BepHandler {
    * If this event is part of an invocation not yet started, or one already finished, the event may be ignored and dropped,
    * or an error raised depending on the handler implementation
    */
-  handleBuildEvent(streamId: StreamId, event: BuildEvent): void;
+  handleBuildEvent(streamId: StreamId, event: BuildEvent, sequenceNumber: number): void;
 
   /**
    * Returns the 'latest' data (as known by this handler) about the given invocation
