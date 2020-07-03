@@ -51,8 +51,8 @@ export class LocalFilePersistenceProvider extends PersistenceProvider {
     if (!this.checkSession(streamId.invocationId)) { return; }
 
     fs.appendFileSync(
-      this.makePathFor(streamId.invocationId, 'ref.json'),
-      '\n' + log,
+      this.makePathFor(streamId.invocationId, 'ref.log'),
+      log.join(''),
       { encoding: 'utf8' }
     );
   }

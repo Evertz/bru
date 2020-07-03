@@ -21,11 +21,12 @@ export class DefaultInvocationHandler implements InvocationHandler {
   private buildEventHandler = new DefaultBuildEventHandler(true);
 
   constructor(private readonly persistenceService: PersistenceService) {
-    setInterval(() => this.logProcessStats(), 1000 * 30);
+    setInterval(this.logProcessStats.bind(this), 1000 * 30);
   }
 
   notifyInvocationStarted(streamId: StreamId, event: InvocationAttemptStarted): void {
     this.logger.log(`Starting streaming ref '${streamId.invocationId}'`);
+    this.logger.debug(`Now tracking ${this.data.size} refs`);
     this.logProcessStats();
 
     const invocation = Invocation.init(streamId.invocationId);
@@ -48,6 +49,7 @@ export class DefaultInvocationHandler implements InvocationHandler {
     this.buildEventStreams.delete(streamId.invocationId);
 
     this.logger.log(`Disposed of streaming ref '${streamId.invocationId}'`);
+    this.logger.debug(`Now tracking ${this.data.size} refs`);
     this.logProcessStats();
   }
 
@@ -55,21 +57,23 @@ export class DefaultInvocationHandler implements InvocationHandler {
     const invocation = this.data.get(streamId.invocationId);
     if (!invocation) { return; }
 
-    if (event.id.fetch) { this.buildEventHandler.handleFetch(invocation, streamId, event); }
-    if (event.id.started) { this.buildEventHandler.handleStarted(invocation, streamId, event); }
-    if (event.id.buildFinished) { this.buildEventHandler.handleBuildFinished(invocation, streamId, event); }
-    if (event.id.targetConfigured) { this.buildEventHandler.handleTargetConfigured(invocation, streamId, event) }
-    if (event.id.targetCompleted) { this.buildEventHandler.handleTargetCompleted(invocation, streamId, event); }
-    if (event.id.actionComplete) { this.buildEventHandler.handleActionComplete(invocation, streamId, event); }
-    if (event.id.testResult) { this.buildEventHandler.handleTestResult(invocation, streamId, event); }
-    if (event.id.buildMetadata) { this.buildEventHandler.handleBuildMetadata(invocation, streamId, event); }
-    if (event.id.buildMetrics) { this.buildEventHandler.handleBuildMetrics(invocation, streamId, event); }
-    if (event.id.pattern) { this.buildEventHandler.handlePattern(invocation, streamId, event); }
-    if (event.id.progress) { this.buildEventHandler.handleProgress(invocation, streamId, event); }
-    if (event.id.configuration) { this.buildEventHandler.handleConfiguration(invocation, streamId, event); }
-    if (event.id.workspaceStatus) { this.buildEventHandler.handleWorkspaceStatus(invocation, streamId, event); }
-    if (event.id.structuredCommandLine) { this.buildEventHandler.handleStructuredCommandLine(invocation, streamId, event); }
-    if (event.id.unstructuredCommandLine) { this.buildEventHandler.handleUnstructuredCommandLine(invocation, streamId, event); }
+    let handled = false;
+
+    if (event.id.fetch) { handled = this.buildEventHandler.handleFetch(invocation, streamId, event); }
+    if (event.id.started) { handled = this.buildEventHandler.handleStarted(invocation, streamId, event); }
+    if (event.id.buildFinished) { handled = this.buildEventHandler.handleBuildFinished(invocation, streamId, event); }
+    if (event.id.targetConfigured) { handled = this.buildEventHandler.handleTargetConfigured(invocation, streamId, event) }
+    if (event.id.targetCompleted) { handled = this.buildEventHandler.handleTargetCompleted(invocation, streamId, event); }
+    if (event.id.actionComplete) { handled = this.buildEventHandler.handleActionComplete(invocation, streamId, event); }
+    if (event.id.testResult) { handled = this.buildEventHandler.handleTestResult(invocation, streamId, event); }
+    if (event.id.buildMetadata) { handled = this.buildEventHandler.handleBuildMetadata(invocation, streamId, event); }
+    if (event.id.buildMetrics) { handled = this.buildEventHandler.handleBuildMetrics(invocation, streamId, event); }
+    if (event.id.pattern) { handled = this.buildEventHandler.handlePattern(invocation, streamId, event); }
+    if (event.id.progress) { handled = this.buildEventHandler.handleProgress(invocation, streamId, event); }
+    if (event.id.configuration) { handled = this.buildEventHandler.handleConfiguration(invocation, streamId, event); }
+    if (event.id.workspaceStatus) { handled = this.buildEventHandler.handleWorkspaceStatus(invocation, streamId, event); }
+    if (event.id.structuredCommandLine) { handled = this.buildEventHandler.handleStructuredCommandLine(invocation, streamId, event); }
+    if (event.id.unstructuredCommandLine) { handled = this.buildEventHandler.handleUnstructuredCommandLine(invocation, streamId, event); }
 
     if (this.buildEventStreams.has(streamId.invocationId)) {
       // now that it's been handled, forward to any proxies (eg, persistence layers)
@@ -77,6 +81,12 @@ export class DefaultInvocationHandler implements InvocationHandler {
       if (!stream.closed) {
         this.buildEventStreams.get(streamId.invocationId).next(event);
       }
+    }
+
+    if (!handled) {
+      const type = Object.keys(event.id)[0];
+      this.logger.warn(`Unhandled build event on invocation '${streamId.invocationId}' with type '${type}'`);
+      //this.logger.debug(event);
     }
   }
 

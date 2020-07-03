@@ -135,7 +135,7 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
 
     invocation.notifyDetailsChange();
 
-    return Object.keys(invocation.ref.invocationDetails.metrics).length > 0;
+    return true;
   }
 
   handleBuildMetadata(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
@@ -158,7 +158,7 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
   handleProgress(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
     const stdout = event.progress.stdout;
     const stderr = event.progress.stderr;
-    const lines = stderr;
+    const lines = stderr + stdout;
 
     if (!lines.length) {
       return false;
