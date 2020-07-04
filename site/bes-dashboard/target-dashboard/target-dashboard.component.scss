@@ -5,16 +5,10 @@
   line-height: $size;
 }
 
-.bes-wrapper {
-  height: calc(100% - 60px);
-  overflow: auto;
-}
-
-.bes-welcome-container {
-  height: calc(100vh - 255px);
-  overflow: hidden;
-
-  mat-icon {
-    @include mat-icon-size(60px);
+mat-list.mat-list {
+  mat-list-item.mat-list-item {
+    height: 100%;
+    margin-top: 12px;
+    margin-bottom: 12px;
   }
 }

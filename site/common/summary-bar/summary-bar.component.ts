@@ -8,6 +8,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { isObservable, of, Observable } from 'rxjs';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 export interface SummaryBarItem<T extends any> {
   key: string;
@@ -63,27 +64,15 @@ export class SummaryItemComponent {}
 export class SummaryBarComponent {
   @Input() items: SummaryBarItems = [];
 
-  constructor(private readonly snackbar: MatSnackBar) {}
+  constructor(private readonly snackbar: MatSnackBar,
+              private readonly clipboard: Clipboard) {}
 
   _itemTrackBy(index: number, item: SummaryBarItem<any>) {
     return item.key;
   }
 
   onCopyClick(target: string) {
-    let tmpInput: HTMLTextAreaElement;
-    try {
-      tmpInput = document.createElement('textarea');
-      tmpInput.innerHTML = target;
-      document.body.appendChild(tmpInput);
-      tmpInput.select();
-      document.execCommand('copy');
-
-      this.snackbar.open('Copied label to clipboard', 'CLOSE', { duration: 3000 });
-    } catch (e) {
-    } finally {
-      if (tmpInput) {
-        document.body.removeChild(tmpInput);
-      }
-    }
+    this.clipboard.copy(target);
+    this.snackbar.open('Copied label to clipboard', 'CLOSE', { duration: 3000 });
   }
 }

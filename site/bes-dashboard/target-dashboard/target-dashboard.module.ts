@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 
 import { SummaryBarModule } from '../../common/summary-bar/summary-bar.module';
@@ -16,6 +17,7 @@ import { TargetDashboardComponent } from './target-dashboard.component';
     MatInputModule,
     MatIconModule,
     MatTabsModule,
+    MatListModule,
     FlexLayoutModule,
     RouterModule.forChild([]),
     SummaryBarModule

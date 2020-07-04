@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { DashPipeModule } from '../dash-pipe/dash.pipe';
 import {
@@ -35,6 +36,7 @@ import {
     MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
+    ClipboardModule,
     DashPipeModule,
     RouterModule.forChild([])
   ]

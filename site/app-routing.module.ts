@@ -7,7 +7,6 @@ import { InvocationDashboardComponent } from './bes-dashboard/invocation-dashboa
 import { InvocationDetailsComponent } from './bes-dashboard/invocation-dashboard/invocation-details/invocation-details.component';
 import { InvocationLogComponent } from './bes-dashboard/invocation-dashboard/invocation-log/invocation-log.component';
 import { TargetDetailsComponent } from './bes-dashboard/invocation-dashboard/target-details/target-details.component';
-import { LabelLogComponent } from './bes-dashboard/target-dashboard/label-log/label-log.component';
 import { TargetDashboardComponent } from './bes-dashboard/target-dashboard/target-dashboard.component';
 import { HomeComponent } from './home/home.component';
 
@@ -45,17 +44,7 @@ const routes: Routes = [
       {
         path: 'targets/:label',
         component: TargetDashboardComponent,
-        children: [
-          {
-            path: '',
-            redirectTo: 'log',
-            pathMatch: 'full'
-          },
-          {
-            path: 'log',
-            component: LabelLogComponent
-          }
-        ]
+        children: []
       }
     ]
   }

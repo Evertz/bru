@@ -21,6 +21,7 @@ import { BesEventData, EventType } from '../../types/events';
 
 @Injectable({ providedIn: 'root' })
 export class Bes2Service {
+  public static readonly LABEL_URL_PARAM = 'label';
   public static readonly INVOCATION_URL_PARAM = 'invocation';
 
   private static readonly CONTROL_REG = /.*\[1A.*?\[K/g;

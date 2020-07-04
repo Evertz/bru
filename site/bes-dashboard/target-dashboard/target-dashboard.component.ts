@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { combineLatest, from, Observable } from 'rxjs';
-import { filter, map, startWith, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { MomentDurationPipe } from '../../common/duration-pipe/duration.pipe';
 
 import { SummaryBarItems } from '../../common/summary-bar/summary-bar.component';
-import { BesService } from '../../services/bes.service';
+import { Bes2Service } from '../../services/bes2.service';
+import { Target } from '../../../types/invocation-ref';
 
 @Component({
   selector: 'bes-target-dashboard',
@@ -15,35 +16,38 @@ import { BesService } from '../../services/bes.service';
 })
 export class TargetDashboardComponent implements OnInit {
   readonly navLinks = [
-    { label: 'Target Details', path: ['.', 'details'] },
-    { label: 'Target Log', path: ['.', 'log'] },
-    { label: 'Artifacts', path: ['.', 'artifacts'] }
+    { label: 'Target Details', path: ['.'] },
+    //{ label: 'Target Log', path: ['.', 'log'] },
+    //{ label: 'Artifacts', path: ['.', 'artifacts'] }
   ];
 
   routeActivated: boolean;
+  target$: Observable<Target>;
   metadata$: Observable<SummaryBarItems>;
 
   constructor(private readonly route: ActivatedRoute,
-              private readonly bes: BesService) {}
+              private readonly bes: Bes2Service) {}
 
   ngOnInit() {
-    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(BesService.INVOCATION_URL_PARAM)));
-    const label$ = this.route.paramMap.pipe(
-      map(values => values.get(BesService.LABEL_URL_PARAM))
-    );
+    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)));
+    const label$ = this.route.paramMap.pipe(map(values => values.get(Bes2Service.LABEL_URL_PARAM)));
 
-    this.metadata$ = combineLatest(invocation$, label$)
+    this.target$ = combineLatest([invocation$, label$])
       .pipe(
         switchMap(([invocation, label]) => {
-          return this.bes.getBuildTargets(invocation)
+          return this.bes.registerForTargets(invocation)
             .pipe(
-              switchMap((data: Array<{ label: string }>) => from(data)),
-              filter(targets => targets.label === label)
+              filter(targets => targets.hasOwnProperty(label)),
+              map(targets => targets[label])
             );
         }),
-        map((target: any) => {
+        shareReplay({ refCount: true, bufferSize: 1 })
+      );
+
+    this.metadata$ = this.target$
+      .pipe(
+        map((target: Target) => {
           return [
-            { key: 'Label', value: target.label, canCopy: true },
             { key: 'Kind', value: target.kind },
             { key: 'Start', value: target.testResult.start, transform: 'date' },
             { key: 'Duration', value: `${MomentDurationPipe.transform(target.testResult.duration, 'ms', 's')} (${target.size.toLowerCase()})` },

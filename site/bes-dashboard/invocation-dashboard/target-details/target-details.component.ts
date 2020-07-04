@@ -83,7 +83,7 @@ export class TargetDetailsComponent implements OnInit {
   }
 
   onTargetClick(target: Target) {
-    return;
+    if (!target.testResult) { return; }
 
     const invocationId = this.route.parent.snapshot.paramMap.get(Bes2Service.INVOCATION_URL_PARAM);
 

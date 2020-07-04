@@ -5,9 +5,10 @@
   $warn: map-get($theme, warn);
 
   bes-target-dashboard {
-    .bes-welcome-container {
-      mat-icon {
-        color: mat-color($primary, default, .56);
+    mat-list.mat-list.mat-list-base {
+      .mat-subheader {
+        color: mat-color($foreground, base);
+        background-color: rgb(237, 237, 237);
       }
     }
   }

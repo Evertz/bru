@@ -19,7 +19,6 @@ import { InvocationDashboardModule } from './bes-dashboard/invocation-dashboard/
 import { InvocationDetailsModule } from './bes-dashboard/invocation-dashboard/invocation-details/invocation-details.module';
 import { InvocationLogModule } from './bes-dashboard/invocation-dashboard/invocation-log/invocation-log.module';
 import { TargetDetailsModule } from './bes-dashboard/invocation-dashboard/target-details/target-details.module';
-import { LabelLogModule } from './bes-dashboard/target-dashboard/label-log/label-log.module';
 import { TargetDashboardModule } from './bes-dashboard/target-dashboard/target-dashboard.module';
 import { HomeModule } from './home/home.module';
 import { BesService } from './services/bes.service';
@@ -49,8 +48,7 @@ import { BesService } from './services/bes.service';
     InvocationDetailsModule,
     InvocationLogModule,
     TargetDetailsModule,
-    TargetDashboardModule,
-    LabelLogModule
+    TargetDashboardModule
   ],
   providers: [
     BesService

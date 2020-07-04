@@ -6,7 +6,6 @@
 @import 'common/common.theme';
 @import 'bes-dashboard/bes-dashboard.theme';
 @import 'bes-dashboard/target-dashboard/target-dashboard.theme';
-@import 'bes-dashboard/target-dashboard/label-log/label-log.theme';
 @import 'bes-dashboard/invocation-dashboard/target-details/target-details.theme';
 @import 'bes-dashboard/invocation-dashboard/invocation-dashboard.theme';
 @import 'bes-dashboard/invocation-dashboard/invocation-log/invocation-log.theme';
@@ -43,7 +42,6 @@
   @include app-invocation-log-theme($theme);
   @include app-invocation-details-theme($theme);
   @include app-target-dashboard-theme($theme);
-  @include app-label-log-theme($theme);
 }
 
 // default theme
