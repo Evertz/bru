@@ -5,7 +5,7 @@ import * as lodash_ from 'lodash';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
-import { Bes2Service } from '../../../services/bes2.service';
+import { BesService } from '../../../services/bes.service';
 import { Target } from '../../../../types/invocation-ref';
 
 const _ = (lodash_ as any).default ? (lodash_ as any).default : lodash_;
@@ -61,14 +61,14 @@ export class TargetDetailsComponent implements OnInit {
 
   constructor(private readonly route: ActivatedRoute,
               private readonly router: Router,
-              private readonly bes2: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit() {
-    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)));
+    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(BesService.INVOCATION_URL_PARAM)));
 
     this.targets$ = invocation$
       .pipe(
-        switchMap(invocationId => this.bes2.registerForTargets(invocationId)),
+        switchMap(invocationId => this.bes.registerForTargets(invocationId)),
         map(data => Object.values(data)),
         map(targets => {
           return _.sortBy(targets,
@@ -85,7 +85,7 @@ export class TargetDetailsComponent implements OnInit {
   onTargetClick(target: Target) {
     if (!target.testResult) { return; }
 
-    const invocationId = this.route.parent.snapshot.paramMap.get(Bes2Service.INVOCATION_URL_PARAM);
+    const invocationId = this.route.parent.snapshot.paramMap.get(BesService.INVOCATION_URL_PARAM);
 
     // this is done via URL so that we can encode the target manually, otherwise the route will encode it twice
     const url = `invocation/${invocationId}/targets/${encodeURIComponent(target.label)}`;

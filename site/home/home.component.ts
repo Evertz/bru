@@ -1,7 +1,7 @@
 import { ENTER } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Bes2Service } from '../services/bes2.service';
+import { BesService } from '../services/bes.service';
 
 @Component({
   selector: 'bes-home',
@@ -11,7 +11,7 @@ import { Bes2Service } from '../services/bes2.service';
 export class HomeComponent implements OnInit {
 
   constructor(private readonly router: Router,
-              private readonly bes: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit() {}
 

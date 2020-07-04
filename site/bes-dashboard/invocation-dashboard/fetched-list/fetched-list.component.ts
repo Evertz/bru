@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { Bes2Service } from '../../../services/bes2.service';
+import { BesService } from '../../../services/bes.service';
 import { FetchedResource } from '../../../../types/invocation-ref';
 
 @Component({
@@ -17,12 +17,12 @@ export class FetchedListComponent implements OnInit {
   fetched$: Observable<FetchedResource[]>;
 
   constructor(private readonly route: ActivatedRoute,
-              private readonly bes: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit() {
     this.fetched$ = this.route.parent.paramMap
       .pipe(
-        map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)),
+        map(values => values.get(BesService.INVOCATION_URL_PARAM)),
         switchMap(id => this.bes.registerForFetchedResources(id))
       );
   }

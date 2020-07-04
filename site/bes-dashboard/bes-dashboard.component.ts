@@ -5,7 +5,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 
 import { InfoHeaderItems } from '../common/info-header/info-header.component';
-import { Bes2Service } from '../services/bes2.service';
+import { BesService } from '../services/bes.service';
 import { InvocationDetails } from '../../types/invocation-ref';
 
 @Component({
@@ -18,10 +18,10 @@ export class BesDashboardComponent implements OnInit {
   infoheader$: Observable<InfoHeaderItems>;
 
   constructor(private readonly route: ActivatedRoute,
-              private readonly bes: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit() {
-    const invocation$ = this.route.paramMap.pipe(map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)));
+    const invocation$ = this.route.paramMap.pipe(map(values => values.get(BesService.INVOCATION_URL_PARAM)));
     this.metadata$ = invocation$
       .pipe(
         switchMap(id => this.bes.registerForInvocationDetails(id)),

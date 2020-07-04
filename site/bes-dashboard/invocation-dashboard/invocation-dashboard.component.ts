@@ -9,7 +9,7 @@ const moment = (moment_ as any).default ? (moment_ as any).default : moment_;
 
 import { OrDashPipe } from '../../common/dash-pipe/dash.pipe';
 import { SummaryBarItems } from '../../common/summary-bar/summary-bar.component';
-import { Bes2Service } from '../../services/bes2.service';
+import { BesService } from '../../services/bes.service';
 import { InvocationDetails } from '../../../types/invocation-ref';
 
 @Component({
@@ -31,12 +31,12 @@ export class InvocationDashboardComponent implements OnInit {
   routeActivated: boolean;
 
   constructor(private readonly route: ActivatedRoute,
-              private readonly bes: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit() {
     const data$: Observable<InvocationDetails> = this.route.parent.paramMap
       .pipe(
-        map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)),
+        map(values => values.get(BesService.INVOCATION_URL_PARAM)),
         switchMap(id => this.bes.registerForInvocationDetails(id)),
         shareReplay({ refCount: true, bufferSize: 1 })
       );

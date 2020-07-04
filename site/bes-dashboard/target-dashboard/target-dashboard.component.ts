@@ -6,7 +6,7 @@ import { filter, map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { MomentDurationPipe } from '../../common/duration-pipe/duration.pipe';
 
 import { SummaryBarItems } from '../../common/summary-bar/summary-bar.component';
-import { Bes2Service } from '../../services/bes2.service';
+import { BesService } from '../../services/bes.service';
 import { Target } from '../../../types/invocation-ref';
 
 @Component({
@@ -26,11 +26,11 @@ export class TargetDashboardComponent implements OnInit {
   metadata$: Observable<SummaryBarItems>;
 
   constructor(private readonly route: ActivatedRoute,
-              private readonly bes: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit() {
-    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)));
-    const label$ = this.route.paramMap.pipe(map(values => values.get(Bes2Service.LABEL_URL_PARAM)));
+    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(BesService.INVOCATION_URL_PARAM)));
+    const label$ = this.route.paramMap.pipe(map(values => values.get(BesService.LABEL_URL_PARAM)));
 
     this.target$ = combineLatest([invocation$, label$])
       .pipe(

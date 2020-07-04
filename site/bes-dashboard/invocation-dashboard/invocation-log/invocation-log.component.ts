@@ -5,7 +5,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 
-import { Bes2Service } from '../../../services/bes2.service';
+import { BesService } from '../../../services/bes.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 
@@ -29,12 +29,12 @@ export class InvocationLogComponent implements OnInit, OnDestroy {
               private readonly router: Router,
               private readonly changeDetectorRef: ChangeDetectorRef,
               private readonly sanitizer: DomSanitizer,
-              private readonly bes: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit(): void {
     const logChangeSubscription = this.route.parent.paramMap
       .pipe(
-        map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)),
+        map(values => values.get(BesService.INVOCATION_URL_PARAM)),
         switchMap(id => this.bes.registerForProgress(id)),
         map(data => this.sanitizer.bypassSecurityTrustHtml(data)),
         map(data => [...this.log$.getValue(), data])

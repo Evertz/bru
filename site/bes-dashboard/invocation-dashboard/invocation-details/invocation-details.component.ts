@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 
-import { Bes2Service } from '../../../services/bes2.service';
+import { BesService } from '../../../services/bes.service';
 import {
   HostDetails,
   InvocationDetails,
@@ -24,12 +24,12 @@ export class InvocationDetailsComponent implements OnInit {
   hostDetails$: Observable<HostDetails>;
 
   constructor(private readonly route: ActivatedRoute,
-              private readonly bes: Bes2Service) {}
+              private readonly bes: BesService) {}
 
   ngOnInit() {
     const invocation$ = this.route.parent.paramMap
       .pipe(
-        map(values => values.get(Bes2Service.INVOCATION_URL_PARAM))
+        map(values => values.get(BesService.INVOCATION_URL_PARAM))
       );
 
     this.details$ = invocation$

@@ -1,234 +1,161 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient } from '@angular/common/http';
 
-import { from, of, EMPTY, Observable } from 'rxjs';
+import * as io from 'socket.io-client';
+
+import { concat, from, Observable, of } from 'rxjs';
+import { map, startWith, take, tap } from 'rxjs/operators';
+
 import {
-  catchError,
-  filter,
-  flatMap,
-  map, share,
-  shareReplay,
-  startWith,
-  switchMap,
-  tap,
-  toArray
-} from 'rxjs/operators';
-import { WebSocketSubject } from 'rxjs/webSocket';
+  FetchedResource,
+  HostDetails,
+  Invocation,
+  InvocationDetails,
+  StructuredCommandLine,
+  TargetMap,
+  WorkspaceStatusItems
+} from '../../types/invocation-ref';
+import { BesEventData, EventType } from '../../types/events';
 
-export interface BuildToolMetadata {
-  uuid: string;
-  state: 'running' | 'success' | 'failed';
-  buildToolVersion: string;
-  command: string;
-  startTimeMillis: string;
-  finishTimeMillis: string;
-  workspaceDirectory: string;
-  overallSuccess: boolean;
-  targetMetrics?: {
-    targetsLoaded?: string;
-    targetsConfigured?: string;
-  };
-  actionSummary?: {
-    actionsExecuted?: string;
-    actionsCreated?: string;
-  };
-  packageMetrics?: {
-    packagesLoaded?: string;
-  };
-  exitCode?: string;
-  pattern: string[];
-  successfulTests?: number;
-  failedTests?: number;
-  flakyTests?: number;
-}
+import * as ansi from 'ansi-html';
 
-export type BuildToolLog = string[];
-
-export interface BuildTarget {
-  kind: string;
-  label: string;
-  state: string;
-  success: string;
-  importantOutput: Array<{ name: string, pathPrefix: string[], uri: string }>;
-  size?: string;
-  testSummary?: any;
-  testResult?: {
-    attempt: number;
-    duration: string;
-    run: number;
-    start: string;
-    status: string;
-    strategy: string;
-  };
-}
-
-export type BuildTargets = BuildTarget[];
-
-export interface BuildInvocationDetails {
-  canonical: BuildToolArgs;
-  original: BuildToolArgs;
-  mnemonic: string;
-  cpu: string;
-  fetched: string[];
-  makeVariable?: { [key: string]: string };
-}
-
-export interface BuildToolArgs {
-  command: string;
-  commandArgs: string[];
-  exe: string;
-  residual: string[];
-  startupArgs: string[];
-}
-
-export interface BuildContext {
-  build_number?: number;
-  build_tag?: string;
-  build_url?: string;
-  build_user_email?: string;
-  build_user?: string;
-  ci: boolean;
-  user: string;
-  host: string;
-  git_sha: string;
-  git_branch: string;
-}
-
-export class BesInvocation {
-  private readonly cache: Map<string, any> = new Map();
-  private readonly store = (key: string) => tap(value => this.cache.set(key, value));
-  private readonly retrieve = (key: string, valueOnMissing?: any) =>
-    startWith(this.cache.has(key) ? this.cache.get(key) : valueOnMissing)
-
-  private watchInvocationItem<T>(key: string, fetcher: (invocationId: string) => Observable<T>, valueOnMissing?: T): Observable<T> {
-    return this.invocationChange$
-      .pipe(
-        startWith(this.invocationId),
-        switchMap(id => fetcher(id).pipe(this.store(key))),
-        this.retrieve(key, valueOnMissing),
-        filter(data => !!data),
-        shareReplay(1)
-      );
-  }
-
-  constructor(private readonly bes: BesService,
-              private readonly invocationId: string,
-              private readonly invocationChange$: Observable<string>) {}
-
-  metadata$ = this.watchInvocationItem<BuildToolMetadata>('metadata',
-    () => this.bes.getInvocationItem(this.invocationId, 'metadata', true));
-
-  log$ = this.watchInvocationItem<BuildToolLog>('log',
-    () => this.bes.getInvocationLog(this.invocationId, true), []);
-
-  targets$ = this.watchInvocationItem<BuildTargets>('targets',
-    () => this.bes.getInvocationItem(this.invocationId, 'targets', true), []);
-}
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BesService {
-  private static readonly SOCK_URI = 'wss://vptl2v7345.execute-api.us-east-1.amazonaws.com/prod/';
-  public static readonly INVOCATION_URL_PARAM = 'invocation';
   public static readonly LABEL_URL_PARAM = 'label';
-  private static readonly API_BASE = `bazel-bes.evertz.tools/data`;
+  public static readonly INVOCATION_URL_PARAM = 'invocation';
 
-  private readonly baseUrl = `https://${BesService.API_BASE}`;
-  private readonly socket$: WebSocketSubject<any>;
-  private readonly cache: Map<string, Map<string, any>> = new Map();
-  private readonly testlogs: Map<string, any> = new Map();
-  private readonly registrations: Map<string, BesInvocation> = new Map();
+  private static readonly CONTROL_REG = /.*\[1A.*?\[K/g;
 
-  constructor(private readonly snackbar: MatSnackBar) {
-    this.socket$ = new WebSocketSubject(BesService.SOCK_URI);
-    this.socket$.subscribe(data => console.log(data));
+  private readonly io = io.connect('localhost:3001/events');
+  private invocation: Invocation;
+
+  constructor(private readonly http: HttpClient) {
+    this.io.on(EventType.TARGETS_EVENT, (data: BesEventData<TargetMap>) => {
+      this.invocation.ref.targets = { ...this.invocation.ref.targets, ...data.payload };
+      this.invocation.notifyTargetsChange(this.invocation.ref.targets);
+    });
+
+    this.io.on(EventType.INVOCATION_DETAILS_EVENT, (data: BesEventData<InvocationDetails>) => {
+      this.invocation.ref.invocationDetails = data.payload;
+      this.invocation.notifyDetailsChange();
+    });
+
+    this.io.on(EventType.FETCHED_EVENT, (data: BesEventData<FetchedResource>) => {
+      this.invocation.ref.fetched = [...this.invocation.ref.fetched, data.payload];
+      this.invocation.notifyFetchedChanged(data.payload);
+    });
+
+    this.io.on(EventType.PROGRESS_EVENT, (data: BesEventData<string>) => {
+      const line = data.payload
+        .split('\n')
+        .map(s => {
+          if (s.match(BesService.CONTROL_REG)) {
+            s = s.replace(BesService.CONTROL_REG, '').trim();
+          }
+          return s;
+        })
+        .map(part => ansi(part));
+
+      line.forEach(l => this.invocation.notifyProgressChange(l));
+      this.invocation.ref.progress.push(...line);
+    });
   }
 
-  registerInvocation(invocationId: string): BesInvocation {
-    return null;
-    //if (this.registrations.has(invocationId)) { return this.registrations.get(invocationId); }
-    //
-    //const registration$ = this.socket$.multiplex(
-    //  () => ({ _type: 'register', invocationId }), () => ({ _type: 'unregister', invocationId }), message => true)
-    //  .pipe(map(message => message.invocationId));
-    //
-    //const invocation = new BesInvocation(this, invocationId, registration$.pipe(share()));
-    //this.registrations.set(invocationId, invocation);
-    //
-    //return invocation;
+  registerForInvocation(invocationId: string): Invocation {
+    if (this.invocation && this.invocation.ref.streamId.invocationId === invocationId) {
+      return this.invocation;
+    }
+
+    if (this.invocation) {
+      const previousInvocation = this.invocation.ref.streamId.invocationId;
+      if (previousInvocation) {
+        // unsub?
+      }
+
+      this.invocation.init(invocationId);
+    } else {
+      this.invocation = Invocation.init(invocationId);
+    }
+
+    this.io.emit(`subscribe/${EventType.INVOCATION_DETAILS_EVENT}`, { invocationId });
+    this.io.emit(`subscribe/${EventType.TARGETS_EVENT}`, { invocationId });
+    this.io.emit(`subscribe/${EventType.PROGRESS_EVENT}`, { invocationId });
+    this.io.emit(`subscribe/${EventType.FETCHED_EVENT}`, { invocationId });
+
+    return this.invocation;
   }
 
-  getRawBuildEvents(invocationId: string): Observable<any> {
-    //return this.http.get<any[]>(`${this.baseUrl}/${invocationId}/events.json`);
-    return EMPTY;
-  }
-
-  getBuildMetadata(invocationId: string): Observable<BuildToolMetadata> {
-    return this.getInvocationItem<BuildToolMetadata>(invocationId, 'metadata');
-  }
-
-  getBuildContext(invocationId: string): Observable<BuildContext> {
-    return this.getInvocationItem<BuildContext>(invocationId, 'context');
-  }
-
-  getBuildTargets(invocationId: string): Observable<BuildTargets> {
-    return this.getInvocationItem<BuildTargets>(invocationId, 'targets');
-  }
-
-  getInvocationLog(invocationId: string, forceFetch = false): Observable<BuildToolLog> {
-    return this.getInvocationItem<BuildToolLog>(invocationId, 'log', forceFetch)
+  registerForFetchedResources(invocationId: string): Observable<FetchedResource[]> {
+    return this.registerForInvocation(invocationId)
+      .fetched$
       .pipe(
-        switchMap(group => from(group)),
-        flatMap(lines => lines.split('\n')),
-        toArray()
+        map(_ => this.invocation.ref.fetched),
+        startWith(this.invocation.ref.fetched)
       );
   }
 
-  getInvocationDetails(invocationId: string): Observable<BuildInvocationDetails> {
-    return this.getInvocationItem<BuildInvocationDetails>(invocationId, 'details');
+  registerForTargets(invocationId: string): Observable<TargetMap> {
+    return this.registerForInvocation(invocationId)
+      .targets$
+      .pipe(startWith(this.invocation.ref.targets));
   }
 
-  getTestlogsForLabel(invocationId: string, label: string): Observable<any> {
-    // labels start with a double /, strip it
-    const resolvedLabel = label.substring(2, label.length).replace(':', '/');
-    const key = `${ invocationId }/testlogs/${ resolvedLabel }/test.log`;
-
-    if (this.testlogs.has(key)) {
-      return of(this.testlogs.get(key));
-    }
-
-    return EMPTY;
-
-    //return this.http.get(`${ this.baseUrl }/${ key }`)
-    //  .pipe(
-    //    tap(data => {
-    //      this.testlogs.set(key, data);
-    //    }),
-    //    catchError(err => {
-    //      this.snackbar.open(`Failed to get test logs for invocation '${ invocationId }', see log for details`, 'CLOSE');
-    //      console.error(err);
-    //      return EMPTY;
-    //    })
-    //  );
+  registerForInvocationDetails(invocationId: string): Observable<InvocationDetails> {
+    return this.registerForInvocation(invocationId)
+      .details$
+      .pipe(startWith(this.invocation.ref.invocationDetails));
   }
 
-  getInvocationItem<T>(invocationId: string, item: string, forceFetch = false): Observable<T> {
-    if (!forceFetch && this.cache.has(invocationId) && this.cache.get(invocationId).has(item)) {
-      return of(this.cache.get(invocationId).get(item));
+  registerForProgress(invocationId: string): Observable<string> {
+    const invocation = this.registerForInvocation(invocationId);
+    return concat(
+      from(invocation.ref.progress),
+      invocation.progress$
+    );
+  }
+
+  getStructuredCommandLine(invocationId: string): Observable<StructuredCommandLine> {
+    const invocation = this.registerForInvocation(invocationId);
+    if (invocation.ref.canonicalStructuredCommandLine) {
+      return of(invocation.ref.canonicalStructuredCommandLine);
     }
-    return EMPTY;
-    //return this.http.get<T>(`${this.baseUrl}/${invocationId}/${item}.json`)
-    //  .pipe(
-    //    tap(data => {
-    //      if (!this.cache.has(invocationId)) { this.cache.set(invocationId, new Map()); }
-    //      this.cache.get(invocationId).set(item, data);
-    //    }),
-    //    catchError(err => {
-    //      this.snackbar.open(`Failed to get ${item} for invocation '${invocationId}', see log for details`, 'CLOSE');
-    //      console.error(err);
-    //      return EMPTY;
-    //    })
-    //  );
+
+    return this.get<StructuredCommandLine>(`${invocationId}/commandline`)
+      .pipe(
+        tap(commandLine => invocation.ref.canonicalStructuredCommandLine = commandLine),
+        tap(_ => invocation.notifyCanonicalStructuredCommandLineChange()),
+      );
+  }
+
+  getWorkspaceStatus(invocationId: string): Observable<WorkspaceStatusItems> {
+    const invocation = this.registerForInvocation(invocationId);
+    if (invocation.ref.workspaceStatus) {
+      return of(invocation.ref.workspaceStatus);
+    }
+
+    return this.get<WorkspaceStatusItems>(`${invocationId}/workspacestatus`)
+      .pipe(
+        tap(commandLine => invocation.ref.workspaceStatus = commandLine),
+        tap(_ => invocation.notifyWorkspaceStatusChange()),
+      );
+  }
+
+  getHostDetails(invocationId: string): Observable<HostDetails> {
+    const invocation = this.registerForInvocation(invocationId);
+    if (invocation.ref.hostDetails) {
+      return of(invocation.ref.hostDetails);
+    }
+
+    return this.get<HostDetails>(`${invocationId}/hostdetails`)
+      .pipe(
+        tap(hostDetails => invocation.ref.hostDetails = hostDetails),
+        tap(_ => invocation.notifyHostDetailsChange()),
+      );
+  }
+
+  private get<T>(endpoint: string): Observable<T> {
+    return this.http.get<BesEventData<T>>(`http://localhost:3001/v1/query/${endpoint}`)
+      .pipe(map(event => event.payload as T), take(1));
   }
 
 }

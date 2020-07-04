@@ -21,7 +21,6 @@ import { InvocationLogModule } from './bes-dashboard/invocation-dashboard/invoca
 import { TargetDetailsModule } from './bes-dashboard/invocation-dashboard/target-details/target-details.module';
 import { TargetDashboardModule } from './bes-dashboard/target-dashboard/target-dashboard.module';
 import { HomeModule } from './home/home.module';
-import { BesService } from './services/bes.service';
 
 @NgModule({
   declarations: [
@@ -49,9 +48,6 @@ import { BesService } from './services/bes.service';
     InvocationLogModule,
     TargetDetailsModule,
     TargetDashboardModule
-  ],
-  providers: [
-    BesService
   ],
   bootstrap: [AppComponent]
 })
