@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 
 import { DurationPipeModule } from '../../../common/duration-pipe/duration.pipe';
-import { TargetDetailsComponent, TargetFilterPipe } from './target-details.component';
+import { TargetDetailsComponent, TargetFilterPipe, TargetStatusIconPipe } from './target-details.component';
 
 @NgModule({
   imports: [
@@ -32,7 +32,8 @@ import { TargetDetailsComponent, TargetFilterPipe } from './target-details.compo
   exports: [],
   declarations: [
     TargetDetailsComponent,
-    TargetFilterPipe
+    TargetFilterPipe,
+    TargetStatusIconPipe
   ],
   providers: []
 })

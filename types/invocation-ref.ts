@@ -206,6 +206,11 @@ export interface Target {
      * The build strategy used for this target
      */
     strategy: string;
+
+    /**
+     * If this result was pulled from a cache (local or remote)
+     */
+    cached: boolean;
   };
 }
 

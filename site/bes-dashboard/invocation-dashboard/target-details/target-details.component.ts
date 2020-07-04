@@ -5,7 +5,6 @@ import * as lodash_ from 'lodash';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
-import { BesService } from '../../../services/bes.service';
 import { Bes2Service } from '../../../services/bes2.service';
 import { Target } from '../../../../types/invocation-ref';
 
@@ -15,11 +14,37 @@ const _ = (lodash_ as any).default ? (lodash_ as any).default : lodash_;
   name: 'targetFilter'
 })
 export class TargetFilterPipe implements PipeTransform {
-  transform(value: Target[], label: string): any {
+  transform(value: Target[], label: string): Target[] {
     if (!value) { return []; }
     if (!label) { return value; }
 
     return value.filter(t => t.label.indexOf(label.toLowerCase()) > -1);
+  }
+}
+
+@Pipe({
+  name: 'targetStatusIcon'
+})
+export class TargetStatusIconPipe implements PipeTransform {
+  transform(value: string): string {
+    switch (value) {
+      case 'PASSED':
+        return 'check_circle';
+      case 'FAILED':
+      case 'INCOMPLETE':
+      case 'FAILED_TO_BUILD':
+        return 'error';
+      case 'TIMEOUT':
+        return 'timelapse';
+      case 'FLAKY':
+        return 'replay';
+      case 'REMOTE_FAILURE':
+        return 'save_alt';
+      case 'TOOL_HALTED_BEFORE_TESTING':
+        return 'stop';
+      default:
+        return 'help';
+    }
   }
 }
 
@@ -36,12 +61,10 @@ export class TargetDetailsComponent implements OnInit {
 
   constructor(private readonly route: ActivatedRoute,
               private readonly router: Router,
-              private readonly bes: BesService,
-              private readonly bes2: Bes2Service,
-              private readonly changeDetectorRef: ChangeDetectorRef) {}
+              private readonly bes2: Bes2Service) {}
 
   ngOnInit() {
-    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(BesService.INVOCATION_URL_PARAM)));
+    const invocation$ = this.route.parent.paramMap.pipe(map(values => values.get(Bes2Service.INVOCATION_URL_PARAM)));
 
     this.targets$ = invocation$
       .pipe(
@@ -60,9 +83,9 @@ export class TargetDetailsComponent implements OnInit {
   }
 
   onTargetClick(target: Target) {
-    if (!target.testResult) { return; }
+    return;
 
-    const invocationId = this.route.parent.snapshot.paramMap.get(BesService.INVOCATION_URL_PARAM);
+    const invocationId = this.route.parent.snapshot.paramMap.get(Bes2Service.INVOCATION_URL_PARAM);
 
     // this is done via URL so that we can encode the target manually, otherwise the route will encode it twice
     const url = `invocation/${invocationId}/targets/${encodeURIComponent(target.label)}`;

@@ -21,10 +21,11 @@
 <mat-list dense fxLayout="column" fxFlex>
   <cdk-virtual-scroll-viewport itemSize="31" fxLayout="column" fxFlex minBufferPx="400" maxBufferPx="600">
     <div *cdkVirtualFor="let target of targets$ | async | targetFilter: filter.value; let i = index; trackBy: trackBy">
+      <!-- some targets are clickable to provide further info, but currently disabled -->
       <mat-list-item matRipple [matRippleDisabled]="!target.testResult" [title]="target.label" (click)="onTargetClick(target)"
                      [ngClass]="{
                       'bes-target-details-fail': target.testResult && target.testResult.status !== 'PASSED',
-                      'bes-target-clickable': !!target.testResult
+                      'bes-target-clickable': false
                      }">
         <div class="bes-target-details-row" fxLayout="row" fxLayoutAlign="start center">
           <div class="bes-target-details-item" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px" fxFlex>
@@ -37,15 +38,7 @@
                   'bes-test-result-icon-passed': status === 'PASSED',
                   'bes-test-result-icon-failed': status !== 'PASSED'
                 }">
-                {{ status === 'PASSED' ? 'check_circle' :
-                   status === 'FAILED' ? 'error' :
-                   status === 'TIMEOUT' ? 'timelapse' :
-                   status === 'FLAKY' ? 'replay' :
-                   status === 'INCOMPLETE' ? 'error' :
-                   status === 'REMOTE_FAILURE' ? 'save_alt' :
-                   status === 'FAILED_TO_BUILD' ? 'error' :
-                   status === 'TOOL_HALTED_BEFORE_TESTING' ? 'stop' :
-                   'help' }}
+                {{ status | targetStatusIcon }}
               </mat-icon>
             </ng-container>
             <ng-container *ngIf="!target.testResult">
@@ -85,7 +78,7 @@
                fxFlex="0 0 60px">
             <mat-icon class="bes-target-details-remote"
                       title="Test results were fetched from the remote cache"
-                      *ngIf="target.testResult?.strategy === 'remote cache hit'">
+                      *ngIf="target.testResult?.cached">
               save_alt
             </mat-icon>
           </div>

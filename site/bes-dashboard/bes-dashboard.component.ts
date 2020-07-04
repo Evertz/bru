@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
+import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 
 import { InfoHeaderItems } from '../common/info-header/info-header.component';
 import { Bes2Service } from '../services/bes2.service';

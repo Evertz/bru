@@ -88,7 +88,8 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
       status: TestStatus[event.testResult.status],
       duration: event.testResult.testAttemptDurationMillis.toNumber(),
       start: event.testResult.testAttemptStartMillisEpoch.toNumber(),
-      strategy: event.testResult.executionInfo.strategy,
+      strategy: event.testResult.executionInfo?.strategy,
+      cached: event.testResult.executionInfo.cachedRemotely || event.testResult.cachedLocally,
       attempt: event.id.testResult.attempt,
       run: event.id.testResult.run
     };
@@ -108,8 +109,19 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
     invocation.ref.invocationDetails.testSummary = testSummary;
 
     invocation.notifyDetailsChange();
-
+    console.log(
+      'TEST Result --->',
+      JSON.stringify(event, undefined, 2)
+    );
     return true;
+  }
+
+  handleTestSummary(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
+    console.log(
+      'TEST Summary --->',
+      JSON.stringify(event, undefined, 2)
+    );
+    return false;
   }
 
   handleActionComplete(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {

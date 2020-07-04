@@ -145,6 +145,16 @@ export abstract class BuildEventHandler {
   }
 
   /**
+   * Handles the Test Summary Build Event
+   * @param invocation
+   * @param streamId
+   * @param event
+   */
+  handleTestSummary(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean  {
+    return false;
+  }
+
+  /**
    * Handles the Build Metrics Build Event
    * @param invocation
    * @param streamId
