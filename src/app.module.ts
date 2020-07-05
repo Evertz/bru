@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { BesModule } from './bes/bes.module';
 import { DashModule } from './dash/dash.module';
@@ -14,7 +15,10 @@ import { LocalFilePersistenceProvider } from './persistence/providers/local-file
       providerConfig: {
         base: 'storage'
       }
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: '/site/prodapp'
     })
-  ],
+  ]
 })
 export class AppModule {}

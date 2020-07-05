@@ -10,6 +10,7 @@ ts_library(
         "@npm//@nestjs/common",
         "@npm//@nestjs/core",
         "@npm//@nestjs/microservices",
+        "@npm//@nestjs/serve-static",
         "@npm//@nestjs/websockets",
         "@npm//@types/lodash",
         "@npm//@types/node",
