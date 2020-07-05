@@ -78,7 +78,7 @@ rollup_bundle(
 )
 
 history_server(
-    name = "server",
+    name = "devserver",
     data = [
         "index.html",
         "index.js",

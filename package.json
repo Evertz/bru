@@ -1,6 +1,6 @@
 {
-  "name": "bes-stream",
-  "version": "1.0.0",
+  "name": "bes",
+  "version": "0.0.0-PLACEHOLDER",
   "license": "MIT",
   "scripts": {
     "postinstall": "ngcc"
@@ -37,8 +37,6 @@
     "zone.js": "0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.901.9",
-    "@angular/cli": "9.1.9",
     "@angular/compiler-cli": "9.1.11",
     "@angular/language-service": "9.1.11",
     "@babel/cli": "7.10.4",
@@ -48,8 +46,6 @@
     "@bazel/typescript": "1.7.0",
     "@bazel/rollup": "1.7.0",
     "@bazel/terser": "1.7.0",
-    "@nestjs/cli": "7.0.0",
-    "@nestjs/schematics": "7.0.0",
     "@types/express": "4.17.3",
     "@types/node": "12.12.47",
     "@types/lodash": "4.14.157",
