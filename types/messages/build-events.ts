@@ -1,4 +1,4 @@
-import { Long } from 'Long';
+import { Long } from 'long';
 
 import { Any } from './any';
 import { BuildStatus } from './build-status';

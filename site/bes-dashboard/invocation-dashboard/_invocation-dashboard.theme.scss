@@ -1,4 +1,12 @@
+@import 'target-details/target-details.theme';
+@import 'invocation-log/invocation-log.theme';
+@import 'invocation-details/invocation-details.theme';
+
 @mixin app-invocation-dashboard-theme($theme) {
+  @include app-target-details-theme($theme);
+  @include app-invocation-log-theme($theme);
+  @include app-invocation-details-theme($theme);
+
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);

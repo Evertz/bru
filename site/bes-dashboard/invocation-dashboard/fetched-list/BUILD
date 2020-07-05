@@ -1,20 +1,20 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "fetched-list",
     srcs = glob(["*.ts"]),
-    style = "fetched-list.component.scss",
-    theme = "_fetched-list.theme.scss",
     assets = [
         "fetched-list.component.html",
     ],
+    style = "fetched-list.component.scss",
+    theme = "_fetched-list.theme.scss",
+    visibility = ["//site:__subpackages__"],
     deps = [
-        "//ev/tooling/bes/site/services",
-
-        "@npm//@angular/material",
+        "//site/services",
+        "//types",
         "@npm//@angular/cdk",
         "@npm//@angular/flex-layout",
+        "@npm//@angular/material",
         "@npm//@angular/router",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

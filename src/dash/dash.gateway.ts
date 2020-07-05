@@ -8,7 +8,7 @@ import {
   startWith,
   bufferTime,
 } from 'rxjs/operators';
-import * as chunk from 'lodash.chunk';
+import { chunk } from 'lodash';
 
 import { DefaultInvocationHandler } from '../bes/handlers/default-invocation-handler.service';
 import { Target } from '../../types/invocation-ref';

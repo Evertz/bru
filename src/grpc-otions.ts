@@ -1,7 +1,7 @@
 import { ClientOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 
-export const PROTO_ROOT = join(__dirname, '..', '..', 'src', 'proto');
+export const PROTO_ROOT = join(process.cwd(), 'src', 'proto');
 
 export const GRPC_OPTIONS: ClientOptions = {
   transport: Transport.GRPC,

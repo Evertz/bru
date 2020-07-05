@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import * as io from 'socket.io-client';
+import ansi from 'ansi-html';
 
 import { concat, from, Observable, of } from 'rxjs';
 import { map, startWith, take, tap } from 'rxjs/operators';
@@ -16,8 +17,6 @@ import {
   WorkspaceStatusItems
 } from '../../types/invocation-ref';
 import { BesEventData, EventType } from '../../types/events';
-
-import * as ansi from 'ansi-html';
 
 @Injectable({ providedIn: 'root' })
 export class BesService {

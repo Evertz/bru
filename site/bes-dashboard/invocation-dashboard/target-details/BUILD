@@ -1,23 +1,23 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "target-details",
     srcs = glob(["*.ts"]),
-    theme = "_target-details.theme.scss",
-    style = "target-details.component.scss",
     assets = [
         "target-details.component.html",
     ],
+    style = "target-details.component.scss",
+    theme = "_target-details.theme.scss",
+    visibility = ["//site:__subpackages__"],
     deps = [
-        "//ev/tooling/bes/site/services",
-        "//ev/tooling/bes/site/common/duration-pipe",
-
-        "@npm//@angular/material",
+        "//site/common/duration-pipe",
+        "//site/services",
+        "//types",
         "@npm//@angular/cdk",
-        "@npm//@angular/forms",
         "@npm//@angular/flex-layout",
+        "@npm//@angular/forms",
+        "@npm//@angular/material",
         "@npm//@angular/router",
         "@npm//lodash",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

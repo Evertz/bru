@@ -1,22 +1,27 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "invocation-dashboard",
     srcs = glob(["*.ts"]),
-    theme = "_invocation-dashboard.theme.scss",
-    style = "invocation-dashboard.component.scss",
     assets = [
         "invocation-dashboard.component.html",
     ],
-    deps = [
-        "//ev/tooling/bes/site/services",
-        "//ev/tooling/bes/site/common/dash-pipe",
-        "//ev/tooling/bes/site/common/summary-bar",
-
-        "@npm//moment",
-        "@npm//@angular/router",
-        "@npm//@angular/material",
-        "@npm//@angular/flex-layout",
+    style = "invocation-dashboard.component.scss",
+    theme = "_invocation-dashboard.theme.scss",
+    theme_deps = [
+        "//site/bes-dashboard/invocation-dashboard/invocation-details:invocation-details_theme",
+        "//site/bes-dashboard/invocation-dashboard/invocation-log:invocation-log_theme",
+        "//site/bes-dashboard/invocation-dashboard/target-details:target-details_theme",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
+    visibility = ["//site:__subpackages__"],
+    deps = [
+        "//site/common/dash-pipe",
+        "//site/common/summary-bar",
+        "//site/services",
+        "//types",
+        "@npm//@angular/flex-layout",
+        "@npm//@angular/material",
+        "@npm//@angular/router",
+        "@npm//moment",
+    ],
 )

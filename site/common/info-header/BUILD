@@ -1,19 +1,18 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "info-header",
     srcs = glob(["*.ts"]),
-    style = "info-header.component.scss",
-    theme = "_info-header.theme.scss",
     assets = [
         "info-header.component.html",
     ],
+    style = "info-header.component.scss",
+    theme = "_info-header.theme.scss",
+    visibility = ["//site:__subpackages__"],
     deps = [
-        "//ev/tooling/bes/site/common/dash-pipe",
-
-        "@npm//@angular/router",
-        "@npm//@angular/material",
+        "//site/common/dash-pipe",
         "@npm//@angular/flex-layout",
+        "@npm//@angular/material",
+        "@npm//@angular/router",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

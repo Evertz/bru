@@ -1,4 +1,10 @@
+@import 'target-dashboard/target-dashboard.theme';
+@import 'invocation-dashboard/invocation-dashboard.theme';
+
 @mixin app-bes-dashboard-theme($theme) {
+  @include app-target-dashboard-theme($theme);
+  @include app-invocation-dashboard-theme($theme);
+
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);

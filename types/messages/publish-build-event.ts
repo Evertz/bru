@@ -1,4 +1,4 @@
-import { Long } from 'Long';
+import { Long } from 'long';
 import { Observable } from 'rxjs';
 
 import { BuildEvent, StreamId } from './build-events';

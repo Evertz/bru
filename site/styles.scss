@@ -1,19 +1,48 @@
-@import '~@angular/material/theming';
-@import 'ev_theme';
+@import 'external/npm/node_modules/@angular/material/theming';
 
 @import 'app.theme';
-@import 'home/home.theme';
-@import 'common/common.theme';
-@import 'bes-dashboard/bes-dashboard.theme';
-@import 'bes-dashboard/target-dashboard/target-dashboard.theme';
-@import 'bes-dashboard/invocation-dashboard/target-details/target-details.theme';
-@import 'bes-dashboard/invocation-dashboard/invocation-dashboard.theme';
-@import 'bes-dashboard/invocation-dashboard/invocation-log/invocation-log.theme';
-@import 'bes-dashboard/invocation-dashboard/invocation-details/invocation-details.theme';
+
+$orange: (
+    50 : #ffeee0,
+    100 : #ffd4b3,
+    200 : #ffb780,
+    300 : #ff9a4d,
+    400 : #ff8526,
+    500 : #ff6f00,
+    600 : #ff6700,
+    700 : #ff5c00,
+    800 : #ff5200,
+    900 : #ff4000,
+    A100 : #ffffff,
+    A200 : #fff5f2,
+    A400 : #ffcbbf,
+    A700 : #ffb7a6,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$primary: mat-palette($orange);
+$accent: mat-palette($mat-blue-grey);
+
+$light-theme: mat-light-theme($primary, $accent);
 
 @include mat-core();
 
-@mixin core($theme) {
+@mixin themes($theme) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
@@ -26,26 +55,13 @@
     font-size: .8rem;
     font-weight: 800;
   }
-}
 
-@mixin themes($theme) {
   @include angular-material-theme($theme);
-
-  @include core($theme);
-
   @include app-theme($theme);
-  @include app-common-theme($theme);
-  @include app-home-theme($theme);
-  @include app-bes-dashboard-theme($theme);
-  @include app-target-details-theme($theme);
-  @include app-invocation-dashboard-theme($theme);
-  @include app-invocation-log-theme($theme);
-  @include app-invocation-details-theme($theme);
-  @include app-target-dashboard-theme($theme);
 }
 
 // default theme
-@include themes($ev-light-theme);
+@include themes($light-theme);
 
 html,
 body {

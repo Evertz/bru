@@ -1,4 +1,4 @@
-import { Long } from 'Long';
+import { Long } from 'long';
 
 import { CommandLine } from './command-line';
 import { InvocationPolicy } from './invocation-policy';

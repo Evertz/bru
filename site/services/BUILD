@@ -1,10 +1,12 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "services",
     srcs = ["bes.service.ts"],
+    visibility = ["//site:__subpackages__"],
     deps = [
-        "@npm//@angular/material",
+        "//types",
+        "@npm//ansi-html",
+        "@npm//socket.io-client",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

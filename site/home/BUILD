@@ -1,18 +1,22 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "home",
-    srcs = glob(["*.ts"]),
-    theme = "_home.theme.scss",
-    style = "home.component.scss",
+    srcs = [
+        "home.component.ts",
+        "home.module.ts",
+    ],
     assets = [
         "home.component.html",
     ],
+    style = "home.component.scss",
+    theme = "_home.theme.scss",
+    visibility = ["//site:__pkg__"],
     deps = [
-        "@npm//@angular/router",
-        "@npm//@angular/material",
-        "@npm//@angular/flex-layout",
+        "//site/services",
         "@npm//@angular/cdk",
+        "@npm//@angular/flex-layout",
+        "@npm//@angular/material",
+        "@npm//@angular/router",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

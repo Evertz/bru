@@ -57,10 +57,6 @@ export class LocalFilePersistenceProvider extends PersistenceProvider {
     );
   }
 
-  private makePathFor(invocationId: string, ...extra: string[]): string {
-    return path.join(process.cwd(), this.config.base, 'invocations', invocationId, ...extra);
-  }
-
   fetchBuildEvents(streamId: StreamId): BuildEvent[] {
     return [];
   }
@@ -73,6 +69,8 @@ export class LocalFilePersistenceProvider extends PersistenceProvider {
     if (fs.existsSync(refFile)) {
       const content = fs.readFileSync(refFile, {encoding: 'utf8'});
       ref = JSON.parse(content) as InvocationRef;
+    } else {
+      this.logger.warn(`No persisted ref found for ${refFile}`);
     }
 
     const logFile = path.join(filePath, 'ref.log');
@@ -84,4 +82,8 @@ export class LocalFilePersistenceProvider extends PersistenceProvider {
     return ref;
   }
 
+  private makePathFor(invocationId: string, ...extra: string[]): string {
+    const cwd = process.env.BUILD_WORKSPACE_DIRECTORY ?? process.cwd();
+    return path.join(cwd, this.config.base, 'invocations', invocationId, ...extra);
+  }
 }

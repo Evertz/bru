@@ -1,21 +1,21 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "invocation-details",
     srcs = glob(["*.ts"]),
-    theme = "_invocation-details.theme.scss",
-    style = "invocation-details.component.scss",
     assets = [
         "invocation-details.component.html",
     ],
+    style = "invocation-details.component.scss",
+    theme = "_invocation-details.theme.scss",
+    visibility = ["//site:__subpackages__"],
     deps = [
-        "//ev/tooling/bes/site/services",
-
-        "@npm//moment",
-        "@npm//@angular/material",
-        "@npm//@angular/forms",
+        "//site/services",
+        "//types",
         "@npm//@angular/flex-layout",
+        "@npm//@angular/forms",
+        "@npm//@angular/material",
         "@npm//@angular/router",
+        "@npm//moment",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

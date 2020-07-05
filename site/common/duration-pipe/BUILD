@@ -1,10 +1,10 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "duration-pipe",
     srcs = glob(["*.ts"]),
+    visibility = ["//site:__subpackages__"],
     deps = [
         "@npm//moment",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

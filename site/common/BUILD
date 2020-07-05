@@ -3,10 +3,10 @@ load("@io_bazel_rules_sass//sass:sass.bzl", "sass_library")
 sass_library(
     name = "common_theme",
     srcs = ["_common.theme.scss"],
+    visibility = ["//site:__subpackages__"],
     deps = [
-        "//ev/tooling/bes/site/common/info-header:info-header_theme",
-        "//ev/tooling/bes/site/common/summary-bar:summary-bar_theme",
-        "//ev/tooling/bes/site/common/status-bar:status-bar_theme"
+        "//site/common/info-header:info-header_theme",
+        "//site/common/status-bar:status-bar_theme",
+        "//site/common/summary-bar:summary-bar_theme",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

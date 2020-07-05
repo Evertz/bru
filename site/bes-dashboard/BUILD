@@ -1,20 +1,24 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "bes-dashboard",
     srcs = glob(["*.ts"]),
-    style = "bes-dashboard.component.scss",
-    theme = "_bes-dashboard.theme.scss",
     assets = [
         "bes-dashboard.component.html",
     ],
-    deps = [
-        "//ev/tooling/bes/site/services",
-        "//ev/tooling/bes/site/common/info-header",
-        "//ev/tooling/bes/site/common/status-bar",
-
-        "@npm//@angular/router",
-        "@npm//@angular/flex-layout",
+    style = "bes-dashboard.component.scss",
+    theme = "_bes-dashboard.theme.scss",
+    theme_deps = [
+        "//site/bes-dashboard/invocation-dashboard:invocation-dashboard_theme",
+        "//site/bes-dashboard/target-dashboard:target-dashboard_theme",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
+    visibility = ["//site:__subpackages__"],
+    deps = [
+        "//site/common/info-header",
+        "//site/common/status-bar",
+        "//site/services",
+        "//types",
+        "@npm//@angular/flex-layout",
+        "@npm//@angular/router",
+    ],
 )

@@ -1,4 +1,4 @@
-import { Long } from 'Long';
+import { Long } from 'long';
 
 // A Timestamp represents a point in time independent of any time zone
 // or calendar, represented as seconds and fractions of seconds at

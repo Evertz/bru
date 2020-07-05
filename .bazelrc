@@ -1,0 +1,7 @@
+build --define=angular_ivy_enabled=True
+build --nolegacy_external_runfiles
+build --incompatible_strict_action_env
+
+test --test_output=errors
+
+common --experimental_allow_incremental_repository_updates

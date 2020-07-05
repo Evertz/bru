@@ -1,16 +1,16 @@
-load("//ev/tooling/bazel/rules_ev_web:index.bzl", "ev_ng_module")
+load("//tools:index.bzl", "ng_module")
 
-ev_ng_module(
+ng_module(
     name = "status-bar",
     srcs = glob(["*.ts"]),
-    theme = "_status-bar.theme.scss",
-    style = "status-bar.component.scss",
     assets = [
         "status-bar.component.html",
     ],
+    style = "status-bar.component.scss",
+    theme = "_status-bar.theme.scss",
+    visibility = ["//site:__subpackages__"],
     deps = [
-        "@npm//@angular/material",
         "@npm//@angular/flex-layout",
+        "@npm//@angular/material",
     ],
-    visibility = ["//ev/tooling/bes/site:__subpackages__"],
 )

@@ -1,4 +1,12 @@
+@import 'home/home.theme';
+@import 'common/common.theme';
+@import 'bes-dashboard/bes-dashboard.theme';
+
 @mixin app-theme($theme) {
+  @include app-common-theme($theme);
+  @include app-home-theme($theme);
+  @include app-bes-dashboard-theme($theme);
+
   bes-root {
     .bes-app-toolbar {
       mat-toolbar.mat-toolbar.mat-primary {
