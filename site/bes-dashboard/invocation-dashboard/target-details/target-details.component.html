@@ -25,7 +25,7 @@
       <mat-list-item matRipple [matRippleDisabled]="!target.testResult" [title]="target.label" (click)="onTargetClick(target)"
                      [ngClass]="{
                       'bes-target-details-fail': target.testResult && target.testResult.status !== 'PASSED',
-                      'bes-target-clickable': false
+                      'bes-target-clickable': !!target.testResult
                      }">
         <div class="bes-target-details-row" fxLayout="row" fxLayoutAlign="start center">
           <div class="bes-target-details-item" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px" fxFlex>
