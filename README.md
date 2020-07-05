@@ -1,8 +1,7 @@
 # Bazel Build Dashboard
 
 Build dashboard and service for consuming the [Build Event Protocol](https://docs.bazel.build/versions/master/build-event-protocol.html) 
-and displaying meaningful information about a Bazel build or test invocation. It can display information about a previous or currently
-running invocation.
+and displaying information about a Bazel build or test invocation, supporting historical or inflight builds.
 
 ![](./docs/test-running.png)
 
