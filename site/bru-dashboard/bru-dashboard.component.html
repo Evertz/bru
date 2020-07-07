@@ -1,0 +1,9 @@
+<bru-info-header [items]="infoheader$ | async"></bru-info-header>
+
+<bru-status-bar *ngIf="(metadata$ | async) as metadata"
+                [status]="metadata.exitCode ? metadata.exitCode.name.toLowerCase() : 'running'"
+                [indeterminate]="!metadata.finishTimeMillis"
+                [title]="metadata.command | titlecase">
+</bru-status-bar>
+
+<router-outlet></router-outlet>

@@ -10,24 +10,24 @@
   width: 100%;
 }
 
-.bes-summary-bar-container {
+.bru-summary-bar-container {
   border-bottom-style: solid;
   border-bottom-width: 1px;
   height: 64px;
 }
 
-.bes-item-link {
+.bru-item-link {
   cursor: pointer;
   text-decoration: underline;
 }
 
-.bes-summary-item {
+.bru-summary-item {
   border-right-style: solid;
   border-right-width: 1px;
   padding: 0 24px;
   overflow: hidden;
 
-  .bes-summary-item-value {
+  .bru-summary-item-value {
     word-break: break-all;
   }
 

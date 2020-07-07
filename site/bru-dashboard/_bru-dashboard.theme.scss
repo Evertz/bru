@@ -1,0 +1,16 @@
+@import 'target-dashboard/target-dashboard.theme';
+@import 'invocation-dashboard/invocation-dashboard.theme';
+
+@mixin app-bru-dashboard-theme($theme) {
+  @include app-target-dashboard-theme($theme);
+  @include app-invocation-dashboard-theme($theme);
+
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+
+  bru-dashboard {
+
+  }
+}

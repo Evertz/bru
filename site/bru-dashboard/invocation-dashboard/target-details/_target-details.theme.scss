@@ -1,0 +1,58 @@
+@mixin app-target-details-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $background: map-get($theme, background);
+  $warn: map-get($theme, warn);
+
+  bru-target-details {
+    .bru-target-list-header {
+      background-color: mat-color($background, app-bar);
+      border-bottom-color: mat-color($foreground, divider);
+    }
+
+    .bru-target-search {
+      color: mat-color($foreground, divider);
+      input {
+        background: transparent;
+      }
+    }
+
+    mat-divider.mat-divider.mat-divider-horizontal {
+      border-top-color: mat-color($foreground, divider, .05);
+    }
+
+    mat-list.mat-list.mat-list-base {
+      .mat-subheader {
+        color: mat-color($foreground, base);
+        background-color: rgb(237, 237, 237);
+      }
+    }
+
+    mat-list-item.mat-list-item {
+      &:hover {
+        background-color: mat-color($foreground, secondary-text, .05);
+      }
+    }
+
+    mat-list-item.bru-target-details-fail {
+      background-color: mat-color($warn, .10);
+    }
+
+    .bru-target-details-item {
+      mat-icon.bru-target-details-remote {
+        color: mat-color($foreground, divider);
+      }
+
+      mat-icon.bru-test-result-icon {
+        &.bru-test-result-icon-configured {
+          color: mat-color($foreground, divider) !important;
+        }
+        &.bru-test-result-icon-passed {
+          color: #66bb6a;
+        }
+        &.bru-test-result-icon-failed {
+          color: mat-color($warn);
+        }
+      }
+    }
+  }
+}

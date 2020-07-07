@@ -6,13 +6,13 @@
 
   $success-color: #66bb6a;
 
-  bes-status-bar {
-    .bes-status-container {
+  bru-status-bar {
+    .bru-status-container {
       background-color: mat-color($background, app-bar);
       border-bottom-color: mat-color($foreground, divider);
     }
 
-    .bes-status {
+    .bru-status {
       &-success {
         border-top-color: $success-color;
         background-color: rgba($success-color, .10);

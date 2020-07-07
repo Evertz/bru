@@ -1,19 +1,19 @@
-<div class="bes-info-header-container" fxLayout="row" fxLayoutGap="12px">
+<div class="bru-info-header-container" fxLayout="row" fxLayoutGap="12px">
   <ng-container *ngFor="let entry of items; trackBy: _dataTrackBy; let last = last">
     <div fxLayout="column" fxLayoutAlign="center">
-      <span class="bes-subtitle">{{ entry.key }}</span>
+      <span class="bru-subtitle">{{ entry.key }}</span>
 
-      <span [ngSwitch]="entry.transform" [routerLink]="entry.link" [ngClass]="{ 'bes-item-link': !!entry.link }">
+      <span [ngSwitch]="entry.transform" [routerLink]="entry.link" [ngClass]="{ 'bru-item-link': !!entry.link }">
         <span *ngSwitchCase="'date'">{{ entry.value | date:'medium' | dash }}</span>
         <span *ngSwitchCase="'titlecase'">{{ entry.value | titlecase | dash }}</span>
         <span *ngSwitchDefault>{{ entry.value | dash }}</span>
       </span>
     </div>
-    <div fxLayout="column" fxLayoutAlign="center" *ngIf="!last" class="bes-info-header-item-sep">
+    <div fxLayout="column" fxLayoutAlign="center" *ngIf="!last" class="bru-info-header-item-sep">
       <mat-icon>fiber_manual_record</mat-icon>
     </div>
   </ng-container>
   <div fxLayout="row" fxLayoutAlign="end center" fxFlex="1 1 0">
-    <ng-content select="[besHeaderMenu]"></ng-content>
+    <ng-content select="[bruHeaderMenu]"></ng-content>
   </div>
 </div>

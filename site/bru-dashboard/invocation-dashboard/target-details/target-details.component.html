@@ -1,0 +1,90 @@
+<div class="bru-target-details-loading-container"
+     fxLayout="row"
+     fxLayoutAlign="center center"
+     *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="start center" class="bru-target-list-header">
+  <div fxFlex="0 0 40%" fxLayout="row" fxLayoutAlign="start center" class="bru-target-search">
+    <button mat-icon-button (click)="filter.value = ''">
+      <mat-icon>{{ filter.value?.length ? 'cancel' : 'search' }}</mat-icon>
+    </button>
+    <input matInput #filter type="text" placeholder="Filter targets">
+  </div>
+  <span fxFlex></span>
+  <div fxFlex="0 0 108px" class="bru-target-list-header-item">Status</div>
+  <div fxFlex="0 0 108px" class="bru-target-list-header-item">Type</div>
+  <div fxFlex="0 0 60px" class="bru-target-list-header-item">Duration</div>
+  <div fxFlex="0 0 60px" class="bru-target-list-header-item">Cached</div>
+</div>
+<mat-list dense fxLayout="column" fxFlex>
+  <cdk-virtual-scroll-viewport itemSize="31" fxLayout="column" fxFlex minBufferPx="400" maxBufferPx="600">
+    <div *cdkVirtualFor="let target of targets$ | async | targetFilter: filter.value; let i = index; trackBy: trackBy">
+      <!-- some targets are clickable to provide further info, but currently disabled -->
+      <mat-list-item matRipple [matRippleDisabled]="!target.testResult" [title]="target.label" (click)="onTargetClick(target)"
+                     [ngClass]="{
+                      'bru-target-details-fail': target.testResult && target.testResult.status !== 'PASSED',
+                      'bru-target-clickable': !!target.testResult
+                     }">
+        <div class="bru-target-details-row" fxLayout="row" fxLayoutAlign="start center">
+          <div class="bru-target-details-item" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px" fxFlex>
+            <ng-container *ngIf="!!target.testResult">
+              <mat-icon
+                  class="bru-test-result-icon"
+                  *ngIf="target.testResult.status as status"
+                  title="Test {{ status | titlecase }}"
+                  [ngClass]="{
+                  'bru-test-result-icon-passed': status === 'PASSED',
+                  'bru-test-result-icon-failed': status !== 'PASSED'
+                }">
+                {{ status | targetStatusIcon }}
+              </mat-icon>
+            </ng-container>
+            <ng-container *ngIf="!target.testResult">
+              <mat-icon
+                  class="bru-test-result-icon bru-test-result-icon-{{target.state}}"
+                  title="Target {{ target.state | lowercase }}"
+                  [ngClass]="{
+                  'bru-test-result-icon-passed': target.success,
+                  'bru-test-result-icon-failed': !target.success
+                }">
+                {{ target.success ? 'check_circle_outline' :
+                  target.state === 'aborted' ? 'cancel' : target.state === 'configured' ? 'adjust' : 'error_outline' }}
+              </mat-icon>
+            </ng-container>
+            <span>{{ target.label }}</span>
+          </div>
+
+          <div class="bru-target-details-item"
+               fxFlex="0 0 108px"
+               title="Status">
+            {{ target.testResult ? (target.testResult.status | titlecase) : (target.state | titlecase) }}
+          </div>
+
+          <div class="bru-target-details-item"
+               fxFlex="0 0 108px"
+               [title]="target.kind">
+            {{ target.kind }}
+          </div>
+
+          <div class="bru-target-details-item"
+               fxFlex="0 0 60px">
+            {{ target.testResult ? (target.testResult.duration | duration:'ms':'s') : '' }}
+          </div>
+
+          <div class="bru-target-details-item"
+               fxLayoutAlign="center center"
+               fxFlex="0 0 60px">
+            <mat-icon class="bru-target-details-remote"
+                      title="Test results were fetched from the remote cache"
+                      *ngIf="target.testResult?.cached">
+              save_alt
+            </mat-icon>
+          </div>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</mat-list>

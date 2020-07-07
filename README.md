@@ -1,4 +1,4 @@
-# Bazel Build Dashboard
+# Bazel Build Result UI (Bru)
 
 Build dashboard and service for consuming the [Build Event Protocol](https://docs.bazel.build/versions/master/build-event-protocol.html) 
 and displaying information about a Bazel build or test invocation, supporting historical or inflight builds.

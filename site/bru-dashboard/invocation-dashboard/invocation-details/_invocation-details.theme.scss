@@ -1,0 +1,30 @@
+@mixin app-invocation-details-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $warn: map-get($theme, warn);
+
+  bru-invocation-details {
+    mat-list.mat-list.mat-list-base {
+      .mat-subheader {
+        color: mat-color($foreground, base);
+        background-color: rgb(237, 237, 237);
+      }
+    }
+
+    .bru-invocation-details {
+      &-item-name,
+      &-details-option {
+        color: mat-color($foreground, secondary-text);
+
+        &-value {
+          color: mat-color($foreground, text);
+        }
+      }
+    }
+
+    .bru-invocation-details-cmd-exe,
+    .bru-invocation-details-cmd-cmd,
+    .bru-invocation-details-cmd-res {
+      color: mat-color($foreground, text);
+    }
+  }
+}

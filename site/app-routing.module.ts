@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { BesDashboardComponent } from './bes-dashboard/bes-dashboard.component';
-import { FetchedListComponent } from './bes-dashboard/invocation-dashboard/fetched-list/fetched-list.component';
-import { InvocationDashboardComponent } from './bes-dashboard/invocation-dashboard/invocation-dashboard.component';
-import { InvocationDetailsComponent } from './bes-dashboard/invocation-dashboard/invocation-details/invocation-details.component';
-import { InvocationLogComponent } from './bes-dashboard/invocation-dashboard/invocation-log/invocation-log.component';
-import { TargetDetailsComponent } from './bes-dashboard/invocation-dashboard/target-details/target-details.component';
-import { TargetDashboardComponent } from './bes-dashboard/target-dashboard/target-dashboard.component';
+import { BruDashboardComponent } from './bru-dashboard/bru-dashboard.component';
+import { FetchedListComponent } from './bru-dashboard/invocation-dashboard/fetched-list/fetched-list.component';
+import { InvocationDashboardComponent } from './bru-dashboard/invocation-dashboard/invocation-dashboard.component';
+import { InvocationDetailsComponent } from './bru-dashboard/invocation-dashboard/invocation-details/invocation-details.component';
+import { InvocationLogComponent } from './bru-dashboard/invocation-dashboard/invocation-log/invocation-log.component';
+import { TargetDetailsComponent } from './bru-dashboard/invocation-dashboard/target-details/target-details.component';
+import { TargetDashboardComponent } from './bru-dashboard/target-dashboard/target-dashboard.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
@@ -17,7 +17,7 @@ const routes: Routes = [
   },
   {
     path: 'invocation/:invocation',
-    component: BesDashboardComponent,
+    component: BruDashboardComponent,
     children: [
       {
         path: '',

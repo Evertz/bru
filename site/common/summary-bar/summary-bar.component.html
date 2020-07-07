@@ -1,12 +1,12 @@
-<div class="bes-summary-bar-container" fxLayout="row">
-  <ng-content select="bes-summary-item[align='start']"></ng-content>
+<div class="bru-summary-bar-container" fxLayout="row">
+  <ng-content select="bru-summary-item[align='start']"></ng-content>
   <ng-container *ngFor="let item of items; trackBy: _itemTrackBy">
-    <div class="bes-summary-item" fxLayout="column" fxLayoutAlign="center" fxFlex="1 1">
-      <span class="bes-subtitle">{{ item.key }}</span>
+    <div class="bru-summary-item" fxLayout="column" fxLayoutAlign="center" fxFlex="1 1">
+      <span class="bru-subtitle">{{ item.key }}</span>
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px">
-        <mat-icon class="bes-summary-icon" *ngIf="item.icon">{{ item.icon }}</mat-icon>
-        <span class="bes-summary-item-value" [ngSwitch]="item.transform"
-              [routerLink]="item.link" [ngClass]="{ 'bes-item-link': !!item.link }">
+        <mat-icon class="bru-summary-icon" *ngIf="item.icon">{{ item.icon }}</mat-icon>
+        <span class="bru-summary-item-value" [ngSwitch]="item.transform"
+              [routerLink]="item.link" [ngClass]="{ 'bru-item-link': !!item.link }">
           <span *ngSwitchDefault>{{ item.value | valueAsAsyncValue | async | dash }}</span>
           <span *ngSwitchCase="'titlecase'">{{ item.value | valueAsAsyncValue | async | titlecase }}</span>
           <span *ngSwitchCase="'date'">{{ item.value | valueAsAsyncValue | async | date:'medium' }}</span>
@@ -19,5 +19,5 @@
       </div>
     </div>
   </ng-container>
-  <ng-content select="bes-summary-item[align='end']"></ng-content>
+  <ng-content select="bru-summary-item[align='end']"></ng-content>
 </div>

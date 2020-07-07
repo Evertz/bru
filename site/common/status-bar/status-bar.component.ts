@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'bes-status-bar',
+  selector: 'bru-status-bar',
   templateUrl: './status-bar.component.html',
   styleUrls: ['./status-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

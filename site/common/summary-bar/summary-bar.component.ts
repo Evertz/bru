@@ -30,22 +30,22 @@ export class ValueAsAsyncPipe implements PipeTransform {
   }
 }
 
-@Directive({ selector: 'besSummaryTitle' })
+@Directive({ selector: 'bruSummaryTitle' })
 export class SummaryItemTitleDirective { }
 
-@Directive({ selector: 'besSummaryValue' })
+@Directive({ selector: 'bruSummaryValue' })
 export class SummaryItemValueDirective { }
 
 @Component({
-  selector: 'bes-summary-item',
+  selector: 'bru-summary-item',
   template: `
-    <div class="bes-summary-item" fxLayout="column" fxLayoutAlign="center" fxFlex="1 1">
-      <span class="bes-subtitle">
-        <ng-content select="[besSummaryTitle]"></ng-content>
+    <div class="bru-summary-item" fxLayout="column" fxLayoutAlign="center" fxFlex="1 1">
+      <span class="bru-subtitle">
+        <ng-content select="[bruSummaryTitle]"></ng-content>
       </span>
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px">
-        <span class="bes-summary-item-value">
-          <ng-content select="[besSummaryValue]"></ng-content>
+        <span class="bru-summary-item-value">
+          <ng-content select="[bruSummaryValue]"></ng-content>
         </span>
       </div>
     </div>
@@ -56,7 +56,7 @@ export class SummaryItemValueDirective { }
 export class SummaryItemComponent {}
 
 @Component({
-  selector: 'bes-summary-bar',
+  selector: 'bru-summary-bar',
   templateUrl: './summary-bar.component.html',
   styleUrls: ['./summary-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

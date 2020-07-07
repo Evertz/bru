@@ -10,7 +10,7 @@ export interface InfoHeaderItem {
 export type InfoHeaderItems = InfoHeaderItem[];
 
 @Component({
-  selector: 'bes-info-header',
+  selector: 'bru-info-header',
   templateUrl: './info-header.component.html',
   styleUrls: ['./info-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

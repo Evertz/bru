@@ -3,7 +3,7 @@ import { isDevMode, Component, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'bes-root',
+  selector: 'bru-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

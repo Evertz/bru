@@ -1,0 +1,23 @@
+@mixin app-fetched-list-theme($theme) {
+  $foreground: map-get($theme, foreground);
+  $warn: map-get($theme, warn);
+
+  bru-fetched-list {
+    mat-divider.mat-divider.mat-divider-horizontal {
+      border-top-color: mat-color($foreground, divider, .05);
+    }
+
+    mat-list.mat-list.mat-list-base {
+      .mat-subheader {
+        color: mat-color($foreground, base);
+        background-color: rgb(237, 237, 237);
+      }
+    }
+
+    mat-list-item.mat-list-item {
+      &:hover {
+        background-color: mat-color($foreground, secondary-text, .05);
+      }
+    }
+  }
+}

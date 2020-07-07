@@ -13,7 +13,6 @@ ng_module(
     theme = "_home.theme.scss",
     visibility = ["//site:__pkg__"],
     deps = [
-        "//site/services",
         "@npm//@angular/cdk",
         "@npm//@angular/flex-layout",
         "@npm//@angular/material",

@@ -109,18 +109,10 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
     invocation.ref.invocationDetails.testSummary = testSummary;
 
     invocation.notifyDetailsChange();
-    console.log(
-      'TEST Result --->',
-      JSON.stringify(event, undefined, 2)
-    );
     return true;
   }
 
   handleTestSummary(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
-    console.log(
-      'TEST Summary --->',
-      JSON.stringify(event, undefined, 2)
-    );
     return false;
   }
 

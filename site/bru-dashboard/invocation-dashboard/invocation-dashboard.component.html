@@ -1,0 +1,25 @@
+<bru-summary-bar [items]="metadata$ | async">
+  <bru-summary-item align="start">
+    <ng-container bruSummaryTitle>Duration</ng-container>
+    <ng-container bruSummaryValue>{{ duration$ | async }}</ng-container>
+  </bru-summary-item>
+</bru-summary-bar>
+
+<div class="bru-wrapper" fxLayout="column">
+  <div>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.path"
+         routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+  </div>
+  <router-outlet (activate)="routeActivated = true" (deactivate)="routeActivated = false"></router-outlet>
+  <div *ngIf="!routeActivated" class="bru-welcome-container" fxLayout="column" fxLayoutAlign="center center">
+    <mat-icon>search</mat-icon>
+    <p>Select a tab to view further invocation details</p>
+  </div>
+</div>

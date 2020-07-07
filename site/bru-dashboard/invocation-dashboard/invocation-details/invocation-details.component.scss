@@ -1,0 +1,28 @@
+:host {
+  height: calc(100vh - 255px);
+  overflow: auto;
+  display: block;
+}
+
+mat-list.mat-list {
+  mat-list-item.mat-list-item {
+    height: 100%;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+}
+
+.bru-invocation-details-flags {
+  font-family: Roboto Mono, Courier, monospace;
+
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.bru-invocation-details-item-name {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  word-wrap: break-word;
+}

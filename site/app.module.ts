@@ -13,13 +13,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BesDashboardModule } from './bes-dashboard/bes-dashboard.module';
-import { FetchedListModule } from './bes-dashboard/invocation-dashboard/fetched-list/fetched-list.module';
-import { InvocationDashboardModule } from './bes-dashboard/invocation-dashboard/invocation-dashboard.module';
-import { InvocationDetailsModule } from './bes-dashboard/invocation-dashboard/invocation-details/invocation-details.module';
-import { InvocationLogModule } from './bes-dashboard/invocation-dashboard/invocation-log/invocation-log.module';
-import { TargetDetailsModule } from './bes-dashboard/invocation-dashboard/target-details/target-details.module';
-import { TargetDashboardModule } from './bes-dashboard/target-dashboard/target-dashboard.module';
+import { BruDashboardModule } from './bru-dashboard/bru-dashboard.module';
+import { FetchedListModule } from './bru-dashboard/invocation-dashboard/fetched-list/fetched-list.module';
+import { InvocationDashboardModule } from './bru-dashboard/invocation-dashboard/invocation-dashboard.module';
+import { InvocationDetailsModule } from './bru-dashboard/invocation-dashboard/invocation-details/invocation-details.module';
+import { InvocationLogModule } from './bru-dashboard/invocation-dashboard/invocation-log/invocation-log.module';
+import { TargetDetailsModule } from './bru-dashboard/invocation-dashboard/target-details/target-details.module';
+import { TargetDashboardModule } from './bru-dashboard/target-dashboard/target-dashboard.module';
 import { HomeModule } from './home/home.module';
 
 @NgModule({
@@ -41,7 +41,7 @@ import { HomeModule } from './home/home.module';
     // internal
     AppRoutingModule,
     HomeModule,
-    BesDashboardModule,
+    BruDashboardModule,
     InvocationDashboardModule,
     FetchedListModule,
     InvocationDetailsModule,

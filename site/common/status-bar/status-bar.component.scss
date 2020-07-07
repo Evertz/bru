@@ -2,7 +2,7 @@
   display: block;
 }
 
-.bes-status-container {
+.bru-status-container {
   padding: 0 24px;
   height: 30px;
 
@@ -10,7 +10,7 @@
   border-bottom-width: 1px;
 }
 
-.bes-status-container:not(.bes-status-running):not(.bes-status-queued) {
+.bru-status-container:not(.bru-status-running):not(.bru-status-queued) {
   border-top-style: solid;
   border-top-width: 4px;
 }

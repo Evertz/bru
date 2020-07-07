@@ -1,0 +1,46 @@
+<bru-summary-bar [items]="metadata$ | async"></bru-summary-bar>
+
+<div class="bru-wrapper" fxLayout="column">
+  <div>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.path"
+         routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+  </div>
+  <router-outlet (activate)="routeActivated = true" (deactivate)="routeActivated = false"></router-outlet>
+  <div *ngIf="!routeActivated">
+    <mat-list dense>
+      <ng-container *ngIf="(target$ | async) as target">
+        <h3 matSubheader>Target details</h3>
+        <mat-list-item>
+          <div fxFlex="0 0 144px">Label</div>
+          <div fxFlex>
+            <span>{{ target.label }}</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <ng-container *ngIf="target.tags?.length">
+          <mat-list-item>
+            <div fxFlex="0 0 144px">Tags</div>
+            <div fxFlex>
+              <span>{{ target.tags?.join(' ') }}</span>
+            </div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </ng-container>
+        <mat-list-item>
+          <div fxFlex="0 0 144px">Raw Target Data</div>
+          <div fxFlex>
+            <pre>{{ target | json }}</pre>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+  </div>
+</div>

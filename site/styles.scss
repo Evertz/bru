@@ -50,7 +50,7 @@ $light-theme: mat-light-theme($primary, $accent);
     background-color: mat-color($background, background);
   }
 
-  .bes-subtitle {
+  .bru-subtitle {
     color: mat-color($foreground, secondary-text);
     font-size: .8rem;
     font-weight: 800;
@@ -83,7 +83,7 @@ app-root {
   right: 0;
 }
 
-.bes-loading-container {
+.bru-loading-container {
   display: flex;
   height: 100%;
   justify-content: center;

@@ -1,0 +1,71 @@
+:host {
+  height: calc(100vh - 251px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bru-target-list-header {
+  height: 30px;
+  padding: 0 16px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+
+  .bru-target-list-header-item {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
+  }
+
+  .bru-target-search {
+    input {
+      width: 100%;
+      border: 0;
+      font-size: 13px;
+      outline: 0;
+      -webkit-appearance: unset;
+    }
+  }
+}
+
+.bru-target-details-loading-container {
+  width: 100%;
+}
+
+.bru-target-details-scroll-viewport {
+  height: calc(100vh - 219px);
+}
+
+mat-list.mat-list {
+  min-height: 0;
+
+  mat-list-item.mat-list-item {
+    height: 30px;
+    outline: none;
+
+    &.bru-target-clickable {
+      cursor: pointer;
+    }
+  }
+}
+
+.bru-target-details-row {
+  width: 100%;
+  height: 30px;
+
+  $mat-icon-size: 16px;
+  mat-icon.bru-test-result-icon {
+    height: $mat-icon-size;
+    width: $mat-icon-size;
+    font-size: $mat-icon-size;
+    line-height: $mat-icon-size;
+  }
+
+  .bru-target-details-item {
+    padding-left: 12px;
+    padding-right: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}

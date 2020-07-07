@@ -1,14 +1,14 @@
 @import 'home/home.theme';
 @import 'common/common.theme';
-@import 'bes-dashboard/bes-dashboard.theme';
+@import 'bru-dashboard/bru-dashboard.theme';
 
 @mixin app-theme($theme) {
   @include app-common-theme($theme);
   @include app-home-theme($theme);
-  @include app-bes-dashboard-theme($theme);
+  @include app-bru-dashboard-theme($theme);
 
-  bes-root {
-    .bes-app-toolbar {
+  bru-root {
+    .bru-app-toolbar {
       mat-toolbar.mat-toolbar.mat-primary {
         color: #fff;
       }
