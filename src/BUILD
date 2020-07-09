@@ -33,5 +33,5 @@ nodejs_binary(
         ":src",
         "//src/proto",
     ] + NPM_RUNTIME_DEPS,
-    entry_point = "//src:main.ts",
+    entry_point = ":main.ts",
 )
