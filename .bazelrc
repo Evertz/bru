@@ -1,7 +1,11 @@
+build --strategy=TypeScriptCompile=worker
+build --strategy=AngularTemplateCompile=worker
+
 build --define=angular_ivy_enabled=True
 build --nolegacy_external_runfiles
-build --incompatible_strict_action_env
+#build --incompatible_strict_action_env
 
 test --test_output=errors
 
-common --experimental_allow_incremental_repository_updates
+common:bru --bes_backend=grpc://localhost:5000
+common:bru --bes_results_url=http://localhost:8080/invocation

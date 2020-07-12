@@ -27,6 +27,7 @@ ng_module(
         "//site/home:home_theme",
     ],
     deps = [
+        "//site/services",
         "//site/bru-dashboard",
         "//site/bru-dashboard/invocation-dashboard",
         "//site/bru-dashboard/invocation-dashboard/fetched-list",
@@ -89,6 +90,7 @@ history_server(
         "-a",
         "site",
     ],
+    visibility = ["//:__pkg__"],
 )
 
 rollup_bundle(

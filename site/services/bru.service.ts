@@ -17,6 +17,7 @@ import {
   WorkspaceStatusItems
 } from '../../types/invocation-ref';
 import { BesEventData, EventType } from '../../types/events';
+import { ConfigService } from './config.service';
 
 @Injectable({ providedIn: 'root' })
 export class BruService {
@@ -25,10 +26,14 @@ export class BruService {
 
   private static readonly CONTROL_REG = /.*\[1A.*?\[K/g;
 
-  private readonly io = io.connect('localhost:3001/events');
+  private readonly io;
   private invocation: Invocation;
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient,
+              private readonly config: ConfigService) {
+
+    this.io = io.connect(`${this.config.getHost()}:3001/events`);
+
     this.io.on(EventType.TARGETS_EVENT, (data: BesEventData<TargetMap>) => {
       this.invocation.ref.targets = { ...this.invocation.ref.targets, ...data.payload };
       this.invocation.notifyTargetsChange(this.invocation.ref.targets);

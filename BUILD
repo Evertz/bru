@@ -14,3 +14,13 @@ ts_config(
     visibility = ["//:__subpackages__"],
     deps = [],
 )
+
+alias(
+    name = "server",
+    actual = "//src:bin",
+)
+
+alias(
+    name = "ui",
+    actual = "//site:devserver",
+)
