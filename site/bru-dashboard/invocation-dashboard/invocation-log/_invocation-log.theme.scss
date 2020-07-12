@@ -1,37 +1,46 @@
+@mixin highlight($line-highlight-bg, $line-highlight-fg) {
+  background-color: $line-highlight-bg;
+  color: $line-highlight-fg;
+}
+
 @mixin app-invocation-log-theme($theme) {
   $primary: map-get($theme, primary);
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
   $warn: map-get($theme, warn);
 
+  $line-highlight-fg: white;
+  $line-highlight-bg: #444;
+
   bru-invocation-log {
     .bru-invocation-log {
-      background-color: #333;
+      background-color: black;
+      color: white;
 
       &-line {
-        &:hover {
-          background-color: lighten(#333, 10%);
+        &.highlight {
+          @include highlight($line-highlight-bg, $line-highlight-fg);
+
+          .bru-invocation-log-gutter {
+            @include highlight($line-highlight-bg, $line-highlight-fg);
+          }
         }
       }
 
-      &-item {
-        color: whitesmoke;
+      &-content {
+
       }
 
       &-gutter {
-        background-color: mat-color($background, app-bar);
-        color: mat-color($foreground, secondary-text);
+        color: #585858;
 
         &:hover {
-          background-color: darken(mat-color($background, app-bar), 10%);
+          color: $line-highlight-fg;
         }
 
-        a {
-          color: mat-color($foreground, secondary-text);
-
-          &:active {
-            background-color: darken(mat-color($background, app-bar), 10%);
-          }
+        &:focus {
+          @extend :hover;
+          outline: none;
         }
       }
     }

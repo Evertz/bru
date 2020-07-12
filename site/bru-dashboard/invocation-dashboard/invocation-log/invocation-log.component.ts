@@ -8,7 +8,6 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { BruService } from '../../../services/bru.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-
 @Component({
   selector: 'bru-invocation-log',
   templateUrl: './invocation-log.component.html',
@@ -46,16 +45,16 @@ export class InvocationLogComponent implements OnInit, OnDestroy {
 
     const scrollFragmentSubscription = this.route.fragment
       .pipe(
-        map(line => parseInt(line, 10)),
+        map(line => Number(line)),
         map(line => line - 1)
       )
       .subscribe(line => {
+
         if (!!this.fragment) {
           setTimeout(() => this.scrollToIndex(line), 500);
         } else {
           this.scrollToIndex(line);
         }
-
       });
 
     this.subscriptions.push(logChangeSubscription, scrollSubscription, scrollFragmentSubscription);
@@ -71,8 +70,11 @@ export class InvocationLogComponent implements OnInit, OnDestroy {
   }
 
   private scrollToIndex(index: number) {
-    this.scrollViewport.scrollToIndex(index, 'smooth');
     this.fragment = index;
+    this.scrollViewport.scrollToIndex(index, 'smooth');
+    this.changeDetectorRef.detectChanges();
+
+    console.log(this.fragment);
   }
 
 }

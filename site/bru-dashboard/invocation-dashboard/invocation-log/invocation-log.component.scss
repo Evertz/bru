@@ -1,46 +1,30 @@
+cdk-virtual-scroll-viewport {
+  height: calc(100vh - 251px);
+}
+
 .bru-invocation-log {
-  text-decoration: none;
-  font-family: monospace;
-  line-height: 24px;
-  white-space: pre;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
 
-  cdk-virtual-scroll-viewport {
-    height: calc(100vh - 251px);
-  }
-
-  &-line {
-    height: 24px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 12px;
   }
 
   &-gutter {
-    height: 24px;
-    width: 50px;
-    padding: 0 6px;
-    margin-right: 12px;
-
-    &:hover {
-      cursor: pointer;
-    }
-
-    a {
-      text-decoration: none;
-    }
+    width: 48px;
+    padding-right: 18px;
+    user-select: none;
+    text-align: right;
+    vertical-align: top;
+    cursor: pointer;
   }
 
-  &-item {
-    display: inline-flex;
+  &-content {
+    word-break: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
   }
 }
-
-.bru-log-stb-container {
-  position: absolute;
-  bottom: 24px;
-  right: 24px;
-}
-
-a.bru-log-gutter-link {
-  text-decoration: none;
-  font-family: monospace;
-  font-size: .9em;
-}
-

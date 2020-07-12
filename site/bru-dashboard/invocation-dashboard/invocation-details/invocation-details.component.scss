@@ -5,6 +5,12 @@
 }
 
 mat-list.mat-list {
+  h3.mat-subheader {
+    top: 0;
+    z-index: 10;
+    position: sticky;
+  }
+
   mat-list-item.mat-list-item {
     height: 100%;
     margin-top: 12px;
@@ -13,7 +19,7 @@ mat-list.mat-list {
 }
 
 .bru-invocation-details-flags {
-  font-family: Roboto Mono, Courier, monospace;
+  font-family: 'Roboto Mono', monospace;
 
   overflow-wrap: break-word;
   word-break: break-word;
