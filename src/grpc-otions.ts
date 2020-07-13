@@ -6,7 +6,7 @@ export const PROTO_ROOT = join(process.cwd(), 'src', 'proto');
 export const GRPC_OPTIONS: ClientOptions = {
   transport: Transport.GRPC,
   options: {
-    url: 'localhost:5000',
+    url: '0.0.0.0:5000',
     package: [
       'build_event_stream',
       'google.devtools.build.v1',

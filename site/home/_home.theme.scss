@@ -5,9 +5,13 @@
   $warn: map-get($theme, warn);
 
   bru-home {
+    mat-icon.bru-separator {
+      color: mat-color($foreground, divider);
+    }
+
     .bru-invocation-row-keywords {
-      mat-icon {
-        color: mat-color($foreground, divider);
+      .bru-invocation-keyword {
+        border-right-color: mat-color($foreground, divider);
       }
 
       .key {

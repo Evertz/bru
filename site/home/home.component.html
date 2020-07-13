@@ -24,13 +24,13 @@
             {{ invocation.value.state | buildResultIcon }}
           </mat-icon>
           <div fxFlex="0 0 230px">{{ invocation.key }}</div>
+          <mat-icon class="bru-separator">fiber_manual_record</mat-icon>
           <div class="bru-invocation-row-keywords" fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
             <ng-container *ngFor="let keyword of invocation.value.keywords | keyvalue; let last = last; trackBy: keywordTrackBy">
-              <div fxLayout="row" fxLayoutGap="4px">
+              <div class="bru-invocation-keyword" fxFlex="0 0 220px" fxLayout="row" fxLayoutGap="4px" [ngClass]="{'next': !last}">
                 <span class="key">{{ keyword.key | titlecase }}</span>
                 <span class="value">{{ keyword.value | dash }}</span>
               </div>
-              <mat-icon *ngIf="!last">fiber_manual_record</mat-icon>
             </ng-container>
           </div>
           <div fxFlex="0 0 170px" title="Started">

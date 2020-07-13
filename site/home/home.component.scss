@@ -53,13 +53,26 @@ cdk-virtual-scroll-viewport {
   }
 
   &-keywords {
-    mat-icon {
-      $mat-icon-size: 6px;
+  }
 
-      height: $mat-icon-size;
-      width: $mat-icon-size;
-      font-size: $mat-icon-size;
-      line-height: $mat-icon-size;
+  .bru-invocation-keyword {
+    border-right-width: 1px;
+    border-right-style: solid;
+
+    .value {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-right: 12px;
     }
+  }
+
+  mat-icon.bru-separator {
+    $mat-icon-size: 6px;
+
+    height: $mat-icon-size;
+    width: $mat-icon-size;
+    font-size: $mat-icon-size;
+    line-height: $mat-icon-size;
   }
 }
