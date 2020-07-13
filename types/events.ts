@@ -7,6 +7,7 @@ export const EventType = {
   WORKSPACE_STATUS_EVENT: 'workspacestatus',
   COMMAND_LINE: 'commandline',
   FETCHED_EVENT: 'fetched',
+  INVOCATIONS_EVENT: 'invocations',
 };
 
 export interface BesEventData<T> {
@@ -18,7 +19,7 @@ export interface BesEventData<T> {
   /**
    * The invocationId associated with this event
    */
-  invocationId: string;
+  invocationId?: string;
 }
 
 export interface BesEvent<T> {
@@ -31,6 +32,17 @@ export interface BesEvent<T> {
    * Event data for this event type
    */
   data: BesEventData<T>;
+}
+
+export interface InvocationStates {
+  [invocation: string]: {
+    state: string;
+    started?: number;
+    finished?: number;
+    keywords?: {
+      [key: string]: string
+    }
+  };
 }
 
 export function BesEventFactory<T>(event: string, invocationId: string, payload: T): BesEvent<T> {

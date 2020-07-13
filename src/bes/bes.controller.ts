@@ -56,7 +56,7 @@ export class BesController implements PublishBuildEvent {
         const bazelEvent = BazelBuildEvent.decode(anyBazelEvent.value) as unknown as BuildEvent;
 
         process.nextTick(() =>
-          this.proxies.forEach(proxy => proxy.handleBuildEvent(streamId, bazelEvent, sequenceNumber)));
+          this.proxies.forEach(proxy => proxy.handleBuildEvent(streamId, bazelEvent, sequenceNumber, publishRequest.notificationKeywords)));
       }
 
     }, err => {

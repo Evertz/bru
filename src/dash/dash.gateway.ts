@@ -13,13 +13,15 @@ import { chunk } from 'lodash';
 import { DefaultInvocationHandler } from '../bes/handlers/default-invocation-handler.service';
 import { Target } from '../../types/invocation-ref';
 import { BesEventFactory, EventType } from '../../types/events';
+import { InvocationSummaryHandlerService } from '../bes/handlers/invocation-summary-handler.service';
 
 @Injectable()
 @WebSocketGateway({ namespace: 'events' })
 export class DashGateway {
   private static readonly UPDATE_INTERVAL = 1000;
 
-  constructor(private readonly handler: DefaultInvocationHandler) {}
+  constructor(private readonly handler: DefaultInvocationHandler,
+              private readonly summary: InvocationSummaryHandlerService) {}
 
   @SubscribeMessage('subscribe/targets')
   onSubscribeToTargets(@MessageBody() data: { invocationId: string }): Observable<WsResponse> {
@@ -85,5 +87,13 @@ export class DashGateway {
 
     return concat(from(invocation.ref.fetched), invocation.fetched$)
       .pipe(map(fetched => BesEventFactory(EventType.FETCHED_EVENT, data.invocationId, fetched)));
+  }
+
+  @SubscribeMessage('subscribe/invocations')
+  onSubscribeToInvocations(@MessageBody() data: {}): Observable<WsResponse> {
+    const invocation = this.summary.getTrackedInvocations$();
+
+    return invocation
+      .pipe(map(data => BesEventFactory(EventType.INVOCATIONS_EVENT, undefined, data)));
   }
 }

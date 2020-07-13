@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import * as io from 'socket.io-client';
 import ansi from 'ansi-html';
 
-import { concat, from, Observable, of } from 'rxjs';
+import { BehaviorSubject, concat, from, Observable, of } from 'rxjs';
 import { map, startWith, take, tap } from 'rxjs/operators';
 
 import {
@@ -16,7 +16,7 @@ import {
   TargetMap,
   WorkspaceStatusItems
 } from '../../types/invocation-ref';
-import { BesEventData, EventType } from '../../types/events';
+import { BesEventData, EventType, InvocationStates } from '../../types/events';
 import { ConfigService } from './config.service';
 
 @Injectable({ providedIn: 'root' })
@@ -29,10 +29,14 @@ export class BruService {
   private readonly io;
   private invocation: Invocation;
 
+  private readonly _invocations$: BehaviorSubject<InvocationStates> = new BehaviorSubject<InvocationStates>({});
+
   constructor(private readonly http: HttpClient,
               private readonly config: ConfigService) {
 
     this.io = io.connect(`${this.config.getHost()}:3001/events`);
+
+    this.io.emit(`subscribe/${EventType.INVOCATIONS_EVENT}`, {});
 
     this.io.on(EventType.TARGETS_EVENT, (data: BesEventData<TargetMap>) => {
       this.invocation.ref.targets = { ...this.invocation.ref.targets, ...data.payload };
@@ -62,6 +66,10 @@ export class BruService {
 
       line.forEach(l => this.invocation.notifyProgressChange(l));
       this.invocation.ref.progress.push(...line);
+    });
+
+    this.io.on(EventType.INVOCATIONS_EVENT, (data: BesEventData<InvocationStates>) => {
+      this._invocations$.next(data.payload);
     });
   }
 
@@ -155,6 +163,10 @@ export class BruService {
         tap(hostDetails => invocation.ref.hostDetails = hostDetails),
         tap(_ => invocation.notifyHostDetailsChange()),
       );
+  }
+
+  registerForInvocations(): Observable<InvocationStates> {
+    return this._invocations$.asObservable();
   }
 
   private get<T>(endpoint: string): Observable<T> {

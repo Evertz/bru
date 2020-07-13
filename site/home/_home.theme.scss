@@ -5,6 +5,61 @@
   $warn: map-get($theme, warn);
 
   bru-home {
+    .bru-invocation-row-keywords {
+      mat-icon {
+        color: mat-color($foreground, divider);
+      }
 
+      .key {
+        color: mat-color($foreground, secondary-text);
+      }
+    }
+
+    mat-icon.bru-invocation-status-icon {
+      &.success {
+        color: #66bb6a;
+      }
+
+      &.error {
+        color: mat-color($warn);
+      }
+
+      &.unknown {
+        color: mat-color($foreground, divider);
+      }
+    }
+
+    .bru-invocation-list-header {
+      background-color: mat-color($background, app-bar);
+      border-bottom-color: mat-color($foreground, divider);
+    }
+
+    .bru-invocation-search {
+      color: mat-color($foreground, divider);
+      input {
+        background: transparent;
+      }
+    }
+
+    mat-divider.mat-divider.mat-divider-horizontal {
+      border-top-color: mat-color($foreground, divider, .05);
+    }
+
+    mat-list.mat-list.mat-list-base {
+      .mat-subheader {
+        color: mat-color($foreground, base);
+        background-color: rgb(237, 237, 237);
+      }
+    }
+
+    mat-list-item.mat-list-item {
+      &:hover {
+        background-color: mat-color($foreground, secondary-text, .05);
+      }
+    }
+
+    mat-list-item.error {
+      background-color: mat-color($warn, .10);
+    }
   }
 }

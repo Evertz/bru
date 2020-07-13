@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { EMPTY, Observable, Subject } from 'rxjs';
 
-import { InvocationHandler } from './invocation-handler';
+import { InvocationHandler, InvocationQueryHandler } from './invocation-handler';
 import { DefaultBuildEventHandler } from './default-build-event-handler';
 import { Invocation } from '../../../types/invocation-ref';
 import { InvocationAttemptFinished, InvocationAttemptStarted, StreamId } from '../../../types/messages/build-events';
@@ -10,7 +10,7 @@ import { BuildEvent } from '../../../types/messages/build-event-steam';
 import { PersistenceService } from '../../persistence/persistence.service';
 
 @Injectable()
-export class DefaultInvocationHandler implements InvocationHandler {
+export class DefaultInvocationHandler implements InvocationHandler, InvocationQueryHandler {
   private readonly logger = new Logger(DefaultInvocationHandler.name);
 
   // invocationId -> Invocation

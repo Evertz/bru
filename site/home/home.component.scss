@@ -2,8 +2,64 @@
   height: calc(100vh - 48px);
   display: block;
   overflow: hidden;
+
+  $mat-icon-size: 16px;
+  mat-icon.bru-invocation-status-icon {
+    height: $mat-icon-size;
+    width: $mat-icon-size;
+    font-size: $mat-icon-size;
+    line-height: $mat-icon-size;
+  }
+}
+
+.bru-invocation-list-header {
+  height: 30px;
+  padding: 0 16px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+
+  &.-item {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
+  }
+
+  .bru-invocation-search {
+    input {
+      width: 100%;
+      border: 0;
+      font-size: 13px;
+      outline: 0;
+      -webkit-appearance: unset;
+    }
+  }
 }
 
 .bru-home-id-input {
   width: 280px;
+}
+
+cdk-virtual-scroll-viewport {
+  height: calc(100vh - 202px);
+}
+
+.bru-invocation-row {
+  width: 100%;
+  cursor: pointer;
+
+  &-status {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  &-keywords {
+    mat-icon {
+      $mat-icon-size: 6px;
+
+      height: $mat-icon-size;
+      width: $mat-icon-size;
+      font-size: $mat-icon-size;
+      line-height: $mat-icon-size;
+    }
+  }
 }

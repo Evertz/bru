@@ -1,10 +1,47 @@
-<div fxLayout="column" fxLayoutAlign="center center" fxFlex>
-  <h1>{{ product }} (alpha)</h1>
-  <h3>Open with an invocation Id, or enter one here</h3>
-  <div fxLayout="row">
-    <mat-form-field class="bru-home-id-input" appearance="fill">
-      <mat-label>Bazel Invocation Id</mat-label>
-      <input matInput #input (keypress)="onKeypress($event, input.value)">
-    </mat-form-field>
+<bru-info-header [items]="headerItems"></bru-info-header>
+<bru-summary-bar [items]="summaryItems$ | async"></bru-summary-bar>
+
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" class="bru-invocation-list-header">
+  <div fxFlex="0 0 40%" fxLayout="row" fxLayoutAlign="start center" class="bru-invocation-search">
+    <button mat-icon-button (click)="filter.value = ''">
+      <mat-icon>{{ filter.value?.length ? 'cancel' : 'search' }}</mat-icon>
+    </button>
+    <input matInput #filter type="text" placeholder="Filter Invocations">
   </div>
+  <span fxFlex></span>
+  <div fxFlex="0 0 170px" class="bru-invocation-list-header-item">Started</div>
+  <div fxFlex="0 0 170px" class="bru-invocation-list-header-item">Finished</div>
 </div>
+
+<cdk-virtual-scroll-viewport itemSize="31" minBufferPx="400" maxBufferPx="600">
+  <mat-list dense fxLayout="column" fxFlex>
+    <ng-container *cdkVirtualFor="let invocation of invocations$ | async | keyvalue; trackBy: invocationTrackBy">
+      <mat-list-item matRipple class="{{ invocation.value.state | buildResultStyle }}" (click)="onInvocationClick(invocation.key)">
+        <div class="bru-invocation-row" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+          <mat-spinner class="bru-invocation-row-status" diameter="16" *ngIf="invocation.value.state === 'RUNNING'"></mat-spinner>
+          <mat-icon *ngIf="invocation.value.state !== 'RUNNING'" [title]="invocation.value.state | titlecase"
+                    class="bru-invocation-row-status bru-invocation-status-icon {{ invocation.value.state | buildResultStyle }}">
+            {{ invocation.value.state | buildResultIcon }}
+          </mat-icon>
+          <div fxFlex="0 0 230px">{{ invocation.key }}</div>
+          <div class="bru-invocation-row-keywords" fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px">
+            <ng-container *ngFor="let keyword of invocation.value.keywords | keyvalue; let last = last; trackBy: keywordTrackBy">
+              <div fxLayout="row" fxLayoutGap="4px">
+                <span class="key">{{ keyword.key | titlecase }}</span>
+                <span class="value">{{ keyword.value | dash }}</span>
+              </div>
+              <mat-icon *ngIf="!last">fiber_manual_record</mat-icon>
+            </ng-container>
+          </div>
+          <div fxFlex="0 0 170px" title="Started">
+            {{ invocation.value.started | date:'medium' | dash }}
+          </div>
+          <div fxFlex="0 0 170px" title="Finished">
+            {{ invocation.value.finished | date:'medium' | dash }}
+          </div>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </mat-list>
+</cdk-virtual-scroll-viewport>

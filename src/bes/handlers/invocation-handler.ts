@@ -1,8 +1,8 @@
+import { Observable } from 'rxjs';
+
 import { InvocationAttemptFinished, InvocationAttemptStarted, StreamId } from '../../../types/messages/build-events';
 import { BuildEvent } from '../../../types/messages/build-event-steam';
 import { Invocation } from '../../../types/invocation-ref';
-import { Observable } from 'rxjs';
-
 
 export const RegisteredHandlers = Symbol.for('RegisteredHandlers');
 
@@ -35,8 +35,13 @@ export interface InvocationHandler {
    * If this event is part of an invocation not yet started, or one already finished, the event may be ignored and dropped,
    * or an error raised depending on the handler implementation
    */
-  handleBuildEvent(streamId: StreamId, event: BuildEvent, sequenceNumber: number): void;
+  handleBuildEvent(streamId: StreamId, event: BuildEvent, sequenceNumber: number, notificationKeywords?: string[]): void;
+}
 
+/**
+ * Interface for querying for data on invocations
+ */
+export interface InvocationQueryHandler {
   /**
    * Returns the 'latest' data (as known by this handler) about the given invocation
    */

@@ -4,9 +4,11 @@ import { RegisteredHandlers } from './handlers/invocation-handler';
 import { BuildEventStreamProtoRootProvider } from './build-event-stream-proto-root';
 import { BesController } from './bes.controller';
 import { DefaultInvocationHandler } from './handlers/default-invocation-handler.service';
+import { InvocationSummaryHandlerService } from './handlers/invocation-summary-handler.service';
 
 const Handlers = [
-  DefaultInvocationHandler
+  DefaultInvocationHandler,
+  InvocationSummaryHandlerService
 ];
 
 const HandlersProvider: Provider = {
