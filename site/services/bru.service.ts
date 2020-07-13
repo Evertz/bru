@@ -170,7 +170,7 @@ export class BruService {
   }
 
   private get<T>(endpoint: string): Observable<T> {
-    return this.http.get<BesEventData<T>>(`http://localhost:3001/v1/query/${endpoint}`)
+    return this.http.get<BesEventData<T>>(`http://${this.config.getHost()}:3001/v1/query/${endpoint}`)
       .pipe(map(event => event.payload as T), take(1));
   }
 
