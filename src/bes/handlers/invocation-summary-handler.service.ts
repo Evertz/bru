@@ -23,9 +23,22 @@ export class InvocationSummaryHandlerService implements InvocationHandler {
     setInterval(() => {
       if (!this.finishedInvocations.size) { return; }
 
-      this.finishedInvocations.forEach(invocation => delete this.invocations[invocation]);
-      this.finishedInvocations.clear();
-      this.notifyInvocationsChanged();
+      const threshold = new Date(
+        new Date().getTime() - 1000 * 60 * InvocationSummaryHandlerService.INVOCATION_STALE_MINS).getTime();
+
+      let hasChanged = false;
+      this.finishedInvocations.forEach(invocation => {
+        const state = this.invocations[invocation];
+        if (state.finished <= threshold) {
+          delete this.invocations[invocation];
+          this.finishedInvocations.delete(invocation);
+          hasChanged = true;
+        }
+      });
+
+      if (hasChanged) {
+        this.notifyInvocationsChanged();
+      }
     }, 1000 * 60 * InvocationSummaryHandlerService.INVOCATION_STALE_MINS);
 
     this.invocations$ = this.invocationsChanged$
@@ -54,7 +67,8 @@ export class InvocationSummaryHandlerService implements InvocationHandler {
 
   notifyInvocationStarted(streamId: StreamId, event: InvocationAttemptStarted): void {
     this.invocations[streamId.invocationId] = {
-      state: 'RUNNING'
+      state: 'RUNNING',
+      started: new Date().getTime()
     };
 
     this.notifyInvocationsChanged();
@@ -68,6 +82,7 @@ export class InvocationSummaryHandlerService implements InvocationHandler {
 
     const data = this.invocations[invocationId];
     data.state = Result[event.invocationStatus.result];
+    data.finished = new Date().getTime();
 
     this.finishedInvocations.add(invocationId);
 

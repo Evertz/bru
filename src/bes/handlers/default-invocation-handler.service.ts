@@ -61,6 +61,7 @@ export class DefaultInvocationHandler implements InvocationHandler, InvocationQu
 
     if (event.id.fetch) { handled = this.buildEventHandler.handleFetch(invocation, streamId, event); }
     if (event.id.started) { handled = this.buildEventHandler.handleStarted(invocation, streamId, event); }
+    if (event.id.namedSet) { handled = this.buildEventHandler.handleNamedSet(invocation, streamId, event); }
     if (event.id.buildFinished) { handled = this.buildEventHandler.handleBuildFinished(invocation, streamId, event); }
     if (event.id.targetConfigured) { handled = this.buildEventHandler.handleTargetConfigured(invocation, streamId, event) }
     if (event.id.targetCompleted) { handled = this.buildEventHandler.handleTargetCompleted(invocation, streamId, event); }
@@ -85,7 +86,7 @@ export class DefaultInvocationHandler implements InvocationHandler, InvocationQu
 
     if (!handled) {
       const type = Object.keys(event.id)[0];
-      this.logger.warn(`Unhandled build event on invocation '${streamId.invocationId}' with type '${type}'`);
+      //this.logger.warn(`Unhandled build event on invocation '${streamId.invocationId}' with type '${type}'`);
       //this.logger.debug(event);
     }
   }

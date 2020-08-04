@@ -1052,6 +1052,11 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@tokenizer/token@^0.1.0", "@tokenizer/token@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@tokenizer/token/-/token-0.1.1.tgz#f0d92c12f87079ddfd1b29f614758b9696bc29e3"
+  integrity sha512-XO6INPbZCxdprl+9qa/AAbFFOMzzwqYxpjPgLICrMD6C2FCw6qfJOPcBk6JqqPLSaZ/Qx87qn4rpPmPMwaAK6w==
+
 "@types/body-parser@*":
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.0.tgz#0685b3c47eb3006ffed117cdd55164b61f80538f"
@@ -1079,6 +1084,11 @@
   integrity sha512-2+FrkXY4zllzTNfJth7jOqEHC+enpLeGslEhpnTAkg21GkRrWV4SsAtqchtT4YS9/nODBU2/ZfsBY2X4J/dX7A==
   dependencies:
     "@types/node" "*"
+
+"@types/debug@^4.1.5":
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
+  integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
 
 "@types/estree@*":
   version "0.0.45"
@@ -1112,7 +1122,7 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.157.tgz#fdac1c52448861dfde1a2e1515dbc46e54926dc8"
   integrity sha512-Ft5BNFmv2pHDgxV5JDsndOWTRJ+56zte0ZpYLowp03tW+K+t8u8YMOzAnpuqPgzX6WO1XpDIUm7u04M8vdDiVQ==
 
-"@types/long@*", "@types/long@^4.0.0":
+"@types/long@*", "@types/long@4.0.1", "@types/long@^4.0.0":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.1.tgz#459c65fa1867dafe6a8f322c4c51695663cc55e9"
   integrity sha512-5tXH6Bx/kNGd3MgffdmP4dy2Z+G4eaXw0SE81Tq3BNadtnMR5/ySMzX4SLEzHJzSmPNn4HIdpQsBvXMUykr58w==
@@ -2305,6 +2315,16 @@ fast-safe-stringify@2.0.7:
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.0.7.tgz#124aa885899261f68aedb42a7c080de9da608743"
   integrity sha512-Utm6CdzT+6xsDk2m8S6uL8VHxNwI6Jub+e9NYTcAms28T84pTa25GJQV9j0CY0N1rM8hK4x6grpF2BQf+2qwVA==
 
+file-type@14.7.1:
+  version "14.7.1"
+  resolved "https://registry.yarnpkg.com/file-type/-/file-type-14.7.1.tgz#f748732b3e70478bff530e1cf0ec2fe33608b1bb"
+  integrity sha512-sXAMgFk67fQLcetXustxfKX+PZgHIUFn96Xld9uH8aXPdX3xOp0/jg9OdouVTvQrf7mrn+wAa4jN/y9fUOOiRA==
+  dependencies:
+    readable-web-to-node-stream "^2.0.0"
+    strtok3 "^6.0.3"
+    token-types "^2.0.0"
+    typedarray-to-buffer "^3.1.5"
+
 file-uri-to-path@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
@@ -2674,7 +2694,7 @@ iconv-lite@0.4.24, iconv-lite@^0.4.4:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-ieee754@1.1.13, ieee754@^1.1.4:
+ieee754@1.1.13, ieee754@^1.1.13, ieee754@^1.1.4:
   version "1.1.13"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.13.tgz#ec168558e95aa181fd87d37f55c32bbcb6708b84"
   integrity sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg==
@@ -2943,6 +2963,11 @@ is-stream@^1.0.0, is-stream@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
   integrity sha1-EtSj3U5o4Lec6428hBc66A2RykQ=
+
+is-typedarray@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
+  integrity sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=
 
 is-windows@^1.0.2:
   version "1.0.2"
@@ -3739,6 +3764,11 @@ path-to-regexp@3.2.0:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-3.2.0.tgz#fa7877ecbc495c601907562222453c43cc204a5f"
   integrity sha512-jczvQbCUS7XmS7o+y1aEO9OBVFeZBQ1MDSEqmO7xSoPgOPoowY/SxLpZ6Vh97/8qHZOteiCKb7gkG9gA2ZUxJA==
 
+peek-readable@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/peek-readable/-/peek-readable-3.1.0.tgz#250b08b7de09db8573d7fd8ea475215bbff14348"
+  integrity sha512-KGuODSTV6hcgdZvDrIDBUkN0utcAVj1LL7FfGbM0viKTtCHmtZcuEJ+lGqsp0fTFkGqesdtemV2yUSMeyy3ddA==
+
 picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.0.7:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.1.tgz#21bac888b6ed8601f831ce7816e335bc779f0a4a"
@@ -3902,6 +3932,11 @@ readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.6, readable
     safe-buffer "~5.1.1"
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
+
+readable-web-to-node-stream@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/readable-web-to-node-stream/-/readable-web-to-node-stream-2.0.0.tgz#751e632f466552ac0d5c440cc01470352f93c4b7"
+  integrity sha512-+oZJurc4hXpaaqsN68GoZGQAQIA3qr09Or4fqEsargABnbe5Aau8hFn6ISVleT3cpY/0n/8drn7huyyEvTbghA==
 
 readdirp@^2.2.1:
   version "2.2.1"
@@ -4496,6 +4531,15 @@ strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
+strtok3@^6.0.3:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/strtok3/-/strtok3-6.0.4.tgz#ede0d20fde5aa9fda56417c3558eaafccc724694"
+  integrity sha512-rqWMKwsbN9APU47bQTMEYTPcwdpKDtmf1jVhHzNW2cL1WqAxaM9iBb9t5P2fj+RV2YsErUWgQzHD5JwV0uCTEQ==
+  dependencies:
+    "@tokenizer/token" "^0.1.1"
+    "@types/debug" "^4.1.5"
+    peek-readable "^3.1.0"
+
 supports-color@^5.3.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.5.0.tgz#e2e69a44ac8772f78a1ec0b35b689df6530efc8f"
@@ -4609,6 +4653,14 @@ toidentifier@1.0.0:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
   integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
 
+token-types@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/token-types/-/token-types-2.0.0.tgz#b23618af744818299c6fbf125e0fdad98bab7e85"
+  integrity sha512-WWvu8sGK8/ZmGusekZJJ5NM6rRVTTDO7/bahz4NGiSDb/XsmdYBn6a1N/bymUHuWYTWeuLUg98wUzvE4jPdCZw==
+  dependencies:
+    "@tokenizer/token" "^0.1.0"
+    ieee754 "^1.1.13"
+
 ts-loader@6.2.2:
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-6.2.2.tgz#dffa3879b01a1a1e0a4b85e2b8421dc0dfff1c58"
@@ -4680,6 +4732,13 @@ type@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/type/-/type-2.0.0.tgz#5f16ff6ef2eb44f260494dae271033b29c09a9c3"
   integrity sha512-KBt58xCHry4Cejnc2ISQAF7QY+ORngsWfxezO68+12hKV6lQY8P/psIkcbjeHWn7MqcgciWJyCCevFMJdIXpow==
+
+typedarray-to-buffer@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/typedarray-to-buffer/-/typedarray-to-buffer-3.1.5.tgz#a97ee7a9ff42691b9f783ff1bc5112fe3fca9080"
+  integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
+  dependencies:
+    is-typedarray "^1.0.0"
 
 typedarray@^0.0.6:
   version "0.0.6"

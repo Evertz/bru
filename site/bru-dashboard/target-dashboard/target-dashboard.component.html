@@ -4,16 +4,18 @@
   <div>
     <nav mat-tab-nav-bar>
       <a mat-tab-link
-         *ngFor="let link of navLinks"
+         *ngFor="let link of navLinks$ | async"
          [routerLink]="link.path"
-         routerLinkActive #rla="routerLinkActive"
+         routerLinkActive
+         [routerLinkActiveOptions]="{ exact: false }"
+         #rla="routerLinkActive"
          [active]="rla.isActive">
         {{link.label}}
       </a>
     </nav>
   </div>
   <router-outlet (activate)="routeActivated = true" (deactivate)="routeActivated = false"></router-outlet>
-  <div *ngIf="!routeActivated">
+  <div *ngIf="!routeActivated" class="bru-target-metadata-container">
     <mat-list dense>
       <ng-container *ngIf="(target$ | async) as target">
         <h3 matSubheader>Target details</h3>

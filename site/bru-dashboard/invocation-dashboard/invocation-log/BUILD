@@ -6,17 +6,10 @@ ng_module(
     assets = [
         "invocation-log.component.html",
     ],
-    style = "invocation-log.component.scss",
-    theme = "_invocation-log.theme.scss",
     visibility = ["//site:__subpackages__"],
     deps = [
         "//site/services",
-        "@npm//@angular/cdk",
-        "@npm//@angular/flex-layout",
-        "@npm//@angular/forms",
-        "@npm//@angular/material",
-        "@npm//@angular/platform-browser",
+        "//site/common/console-view",
         "@npm//@angular/router",
-        "@npm//moment",
     ],
 )

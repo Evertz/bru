@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { filter, map, shareReplay, startWith, switchMap, take } from 'rxjs/operators';
 import { MomentDurationPipe } from '../../common/duration-pipe/duration.pipe';
 
 import { SummaryBarItems } from '../../common/summary-bar/summary-bar.component';
@@ -15,13 +15,9 @@ import { Target } from '../../../types/invocation-ref';
   styleUrls: ['./target-dashboard.component.scss']
 })
 export class TargetDashboardComponent implements OnInit {
-  readonly navLinks = [
-    { label: 'Target Details', path: ['.'] },
-    //{ label: 'Target Log', path: ['.', 'log'] },
-    //{ label: 'Artifacts', path: ['.', 'artifacts'] }
-  ];
-
   routeActivated: boolean;
+
+  navLinks$: Observable<any[]>;
   target$: Observable<Target>;
   metadata$: Observable<SummaryBarItems>;
 
@@ -47,15 +43,42 @@ export class TargetDashboardComponent implements OnInit {
     this.metadata$ = this.target$
       .pipe(
         map((target: Target) => {
-          return [
+          const meta: SummaryBarItems = [
             { key: 'Kind', value: target.kind },
-            { key: 'Start', value: target.testResult.start, transform: 'date' },
-            { key: 'Duration', value: `${MomentDurationPipe.transform(target.testResult.duration, 'ms', 's')} (${target.size.toLowerCase()})` },
-            { key: 'Run / Attempt', value: `${target.testResult.run} / ${target.testResult.attempt}` },
-            { key: 'Status', value: target.testResult.status, transform: 'titlecase' }
+            { key: 'State', value: target.state, transform: 'titlecase' },
           ];
+
+          if (target.testResult) {
+            meta.push(
+              { key: 'Start', value: target.testResult.start, transform: 'date' },
+              { key: 'Duration', value: `${MomentDurationPipe.transform(target.testResult.duration, 'ms', 's')} (${target.size.toLowerCase()})` },
+              { key: 'Run / Attempt', value: `${target.testResult.run} / ${target.testResult.attempt}` },
+              { key: 'Status', value: target.testResult.status, transform: 'titlecase' }
+            );
+          }
+
+          return meta;
         }),
         startWith([])
       );
+
+    this.navLinks$ = this.target$
+      .pipe(
+        map(target => {
+          const links = [{ label: 'Target Details', path: ['.'] }];
+
+          if (target.testResult) {
+            links.push(
+              { label: 'Test Results', path: ['.', 'results'] },
+              { label: 'Test Log', path: ['.', 'log'] },
+            )
+          }
+
+          links.push({ label: 'Artifacts', path: ['.', 'artifacts'] });
+
+          return links;
+        }),
+        take(1)
+      )
   }
 }

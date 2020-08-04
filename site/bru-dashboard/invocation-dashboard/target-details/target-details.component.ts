@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import * as lodash_ from 'lodash';
@@ -83,8 +83,6 @@ export class TargetDetailsComponent implements OnInit {
   }
 
   onTargetClick(target: Target) {
-    if (!target.testResult) { return; }
-
     const invocationId = this.route.parent.snapshot.paramMap.get(BruService.INVOCATION_URL_PARAM);
 
     // this is done via URL so that we can encode the target manually, otherwise the route will encode it twice

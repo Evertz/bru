@@ -8,6 +8,7 @@ ts_library(
         "@npm//@types/long",
         "@npm//@types/node",
         "@npm//long",
+        "@npm//grpc",
         "@npm//rxjs",
     ],
 )

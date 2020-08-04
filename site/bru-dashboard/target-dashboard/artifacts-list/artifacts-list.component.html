@@ -1,0 +1,18 @@
+<mat-nav-list dense fxLayout="column" fxFlex *ngIf="target$ | async as target">
+  <cdk-virtual-scroll-viewport itemSize="30" fxLayout="column" fxFlex minBufferPx="400" maxBufferPx="600">
+    <ng-container *ngFor="let pair of files$ | async | keyvalue">
+      <ng-container *cdkVirtualFor="let file of pair.value.files">
+        <a mat-list-item [href]="file | href" target="_blank" rel="nofollow noreferrer noopener">
+          <div fxFlex="0 0 100px">{{ pair.key }}</div>
+          <div fxFlex="0 0 100px">{{ file.location.split('/')[3] }} <span class="bru-secondary">bytes</span></div>
+          <div fxFlex="0 0 470px" class="bru-artifact-sha">{{ file.location.split('/')[2] }}</div>
+          <div fxFlex>
+            <span *ngFor="let pre of file.prefix" class="bru-secondary">{{ pre }}/</span>
+            <span>{{ file.name }}</span>
+          </div>
+        </a>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
+</mat-nav-list>

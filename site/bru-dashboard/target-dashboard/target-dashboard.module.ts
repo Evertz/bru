@@ -13,7 +13,6 @@ import { TargetDashboardComponent } from './target-dashboard.component';
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
     MatInputModule,
     MatIconModule,
     MatTabsModule,

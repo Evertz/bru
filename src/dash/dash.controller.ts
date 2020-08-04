@@ -3,6 +3,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { DefaultInvocationHandler } from '../bes/handlers/default-invocation-handler.service';
 import { BesEventData, BesEventFactory, EventType } from '../../types/events';
 import {
+  FileSet,
   HostDetails, Invocation,
   InvocationDetails,
   StructuredCommandLine,
@@ -32,6 +33,11 @@ export class DashController {
   @Get(':invocation/details')
   async getInvocationDetails(@Param('invocation') invocationId: string): Promise<BesEventData<InvocationDetails>> {
     return this.select(EventType.INVOCATION_DETAILS_EVENT, invocationId, invocation => invocation.ref.invocationDetails);
+  }
+
+  @Get(':invocation/filesets')
+  async getFilesets(@Param('invocation') invocationId: string): Promise<BesEventData<FileSet>> {
+    return this.select(EventType.FILE_SET_EVENT, invocationId, invocation => invocation.ref.fileSets);
   }
 
   private select<T>(event: string, invocationId: string, selector: (invocation: Invocation) => T): BesEventData<T> | undefined {

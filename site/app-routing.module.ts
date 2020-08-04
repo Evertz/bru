@@ -8,7 +8,9 @@ import { InvocationDetailsComponent } from './bru-dashboard/invocation-dashboard
 import { InvocationLogComponent } from './bru-dashboard/invocation-dashboard/invocation-log/invocation-log.component';
 import { TargetDetailsComponent } from './bru-dashboard/invocation-dashboard/target-details/target-details.component';
 import { TargetDashboardComponent } from './bru-dashboard/target-dashboard/target-dashboard.component';
+import { TestLogViewComponent } from './bru-dashboard/target-dashboard/test-log-view/test-log-view.component';
 import { HomeComponent } from './home/home.component';
+import { ArtifactsListComponent } from './bru-dashboard/target-dashboard/artifacts-list/artifacts-list.component';
 
 const routes: Routes = [
   {
@@ -44,7 +46,16 @@ const routes: Routes = [
       {
         path: 'targets/:label',
         component: TargetDashboardComponent,
-        children: []
+        children: [
+          {
+            path: 'log',
+            component: TestLogViewComponent,
+          },
+          {
+            path: 'artifacts',
+            component: ArtifactsListComponent,
+          }
+        ]
       }
     ]
   }

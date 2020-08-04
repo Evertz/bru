@@ -1,0 +1,16 @@
+<div class="bru-console-view">
+  <cdk-virtual-scroll-viewport itemSize="22" minBufferPx="400" maxBufferPx="600">
+    <table>
+      <tbody>
+        <ng-container *cdkVirtualFor="let line of dataset$ | async; let i = index;">
+          <tr class="bru-invocation-log-line"
+              [ngClass]="{ highlight: i === fragment }">
+            <td class="bru-console-view-gutter" [ngClass]="{ highlight: i === fragment }"
+                [routerLink]="['.']" [fragment]="''+ (i + 1)">{{ i + 1 }}</td>
+            <td class="bru-console-view-content" [innerHTML]="line"></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </cdk-virtual-scroll-viewport>
+</div>

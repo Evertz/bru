@@ -8,7 +8,7 @@ import { BehaviorSubject, concat, from, Observable, of } from 'rxjs';
 import { map, startWith, take, tap } from 'rxjs/operators';
 
 import {
-  FetchedResource,
+  FetchedResource, FileSet,
   HostDetails,
   Invocation,
   InvocationDetails,
@@ -53,6 +53,11 @@ export class BruService {
       this.invocation.notifyFetchedChanged(data.payload);
     });
 
+    this.io.on(EventType.FILE_SET_EVENT, (data: BesEventData<FileSet>) => {
+      this.invocation.ref.fileSets = { ...this.invocation.ref.fileSets, ...data.payload };
+      this.invocation.notifyFilesetChanged(this.invocation.ref.fileSets);
+    });
+
     this.io.on(EventType.PROGRESS_EVENT, (data: BesEventData<string>) => {
       const line = data.payload
         .split('\n')
@@ -93,6 +98,7 @@ export class BruService {
     this.io.emit(`subscribe/${EventType.TARGETS_EVENT}`, { invocationId });
     this.io.emit(`subscribe/${EventType.PROGRESS_EVENT}`, { invocationId });
     this.io.emit(`subscribe/${EventType.FETCHED_EVENT}`, { invocationId });
+    this.io.emit(`subscribe/${EventType.FILE_SET_EVENT}`, { invocationId });
 
     return this.invocation;
   }
@@ -124,6 +130,12 @@ export class BruService {
       from(invocation.ref.progress),
       invocation.progress$
     );
+  }
+
+  registerForFilesets(invocationId: string): Observable<FileSet> {
+    const invocation = this.registerForInvocation(invocationId);
+    return invocation.fileSet$
+      .pipe(startWith(invocation.ref.fileSets));
   }
 
   getStructuredCommandLine(invocationId: string): Observable<StructuredCommandLine> {

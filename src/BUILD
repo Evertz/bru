@@ -14,7 +14,11 @@ ts_library(
         "@npm//@nestjs/websockets",
         "@npm//@types/lodash",
         "@npm//@types/node",
+        "@npm//@types/long",
+        "@npm//file-type",
         "@npm//lodash",
+        "@npm//grpc",
+        "@npm//long",
         "@npm//protobufjs",
         "@npm//rxjs",
     ],
@@ -25,6 +29,7 @@ NPM_RUNTIME_DEPS = [
     "@npm//@nestjs/platform-socket.io",
     "@npm//@grpc/proto-loader",
     "@npm//grpc",
+    "@npm//long",
 ]
 
 nodejs_binary(

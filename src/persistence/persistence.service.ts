@@ -1,15 +1,20 @@
+import { WriteStream } from 'fs';
+
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { bufferTime, filter, map } from 'rxjs/operators';
+import { Observable, partition, Subject } from 'rxjs';
 
-import { PersistenceProvider } from './persistence.provider';
+import { BuildEventsPersistenceProvider } from './build-events-persistence.provider';
 import { Invocation, InvocationRef } from '../../types/invocation-ref';
 import { EventType } from '../../types/events';
-import { Observable, partition, Subject } from 'rxjs';
 import { StreamId } from '../../types/messages/build-events';
 import { BuildEvent } from '../../types/messages/build-event-steam';
+import { ActionResult } from '../../types/messages/remote-execution';
+import { CachePersistenceProvider } from './cache-persistence.provider';
 
-export const DEFAULT_PERSISTENCE_PROVIDER = Symbol.for('DEFAULT_PERSISTENCE_PROVIDER');
+export const DEFAULT_BUILD_EVENTS_PERSISTENCE_PROVIDER = Symbol.for('DEFAULT_BE_PERSISTENCE_PROVIDER');
+export const DEFAULT_CACHE_PERSISTENCE_PROVIDER = Symbol.for('DEFAULT_CACHE_PERSISTENCE_PROVIDER');
 
 class CountdownLatch {
   private _latch$: Subject<number> = new Subject<number>();
@@ -39,7 +44,10 @@ export class PersistenceService {
   private readonly logger: Logger = new Logger(PersistenceService.name);
 
   constructor(
-    @Inject(DEFAULT_PERSISTENCE_PROVIDER) private readonly persistenceProvider: PersistenceProvider
+    @Inject(DEFAULT_BUILD_EVENTS_PERSISTENCE_PROVIDER)
+    private readonly persistenceProvider: BuildEventsPersistenceProvider,
+    @Inject(DEFAULT_CACHE_PERSISTENCE_PROVIDER)
+    private readonly cachePersistenceProvider: CachePersistenceProvider
   ) {}
 
   startPersistenceSessionForInvocation(invocation: Invocation, buildEvent$: Observable<BuildEvent>) {
@@ -55,8 +63,8 @@ export class PersistenceService {
       .subscribe({
         complete: () => {
           process.nextTick(() => {
-            this.persistenceProvider.endSession(invocation.ref.streamId);
             this.logger.log(`Invocation '${invocation.ref.streamId.invocationId}' marked complete, closing persistence session`);
+            this.persistenceProvider.endSession(invocation.ref.streamId);
           });
         }
       });
@@ -95,6 +103,26 @@ export class PersistenceService {
           process.nextTick(() => this.persistenceProvider.persistBuildEvents(invocation.ref.streamId, events)),
         complete: () => allReportComplete.countdown()
       });
+  }
+
+  persistActionResult(key: string, actionResult: ActionResult) {
+    process.nextTick(() => this.cachePersistenceProvider.persistActionResult(key, actionResult));
+  }
+
+  fetchActionResult(key: string): ActionResult {
+    return this.cachePersistenceProvider.fetchActionResult(key);
+  }
+
+  persistBuildArtifact(key: string, data?: Buffer): WriteStream {
+    return this.cachePersistenceProvider.persistBuildArtifact(key, data);
+  }
+
+  hasBuildArtifact(key: string): boolean {
+    return this.cachePersistenceProvider.hasBuildArtifact(key);
+  }
+
+  fetchBuildArtifact(key: string): Buffer | undefined {
+    return this.cachePersistenceProvider.fetchBuildArtifact(key);
   }
 
   fetchInvocationRef(streamId: StreamId): InvocationRef {

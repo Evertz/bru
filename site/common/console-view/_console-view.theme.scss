@@ -3,7 +3,7 @@
   color: $line-highlight-fg;
 }
 
-@mixin app-invocation-log-theme($theme) {
+@mixin app-console-view-theme($theme) {
   $primary: map-get($theme, primary);
   $foreground: map-get($theme, foreground);
   $background: map-get($theme, background);
@@ -12,8 +12,8 @@
   $line-highlight-fg: white;
   $line-highlight-bg: #444;
 
-  bru-invocation-log {
-    .bru-invocation-log {
+  bru-console-view {
+    .bru-console-view {
       background-color: black;
       color: white;
 
@@ -21,7 +21,7 @@
         &.highlight {
           @include highlight($line-highlight-bg, $line-highlight-fg);
 
-          .bru-invocation-log-gutter {
+          .bru-console-view-gutter {
             @include highlight($line-highlight-bg, $line-highlight-fg);
           }
         }

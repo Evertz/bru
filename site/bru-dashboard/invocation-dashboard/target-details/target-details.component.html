@@ -21,11 +21,9 @@
 <mat-list dense fxLayout="column" fxFlex>
   <cdk-virtual-scroll-viewport itemSize="31" fxLayout="column" fxFlex minBufferPx="400" maxBufferPx="600">
     <div *cdkVirtualFor="let target of targets$ | async | targetFilter: filter.value; let i = index; trackBy: trackBy">
-      <!-- some targets are clickable to provide further info, but currently disabled -->
-      <mat-list-item matRipple [matRippleDisabled]="!target.testResult" [title]="target.label" (click)="onTargetClick(target)"
+      <mat-list-item class="bru-target-clickable" matRipple [title]="target.label" (click)="onTargetClick(target)"
                      [ngClass]="{
-                      'bru-target-details-fail': target.testResult && target.testResult.status !== 'PASSED',
-                      'bru-target-clickable': !!target.testResult
+                      'bru-target-details-fail': target.testResult && target.testResult.status !== 'PASSED'
                      }">
         <div class="bru-target-details-row" fxLayout="row" fxLayoutAlign="start center">
           <div class="bru-target-details-item" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="6px" fxFlex>

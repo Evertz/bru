@@ -1,5 +1,5 @@
 # ng generator flags
---load_mapping=ng_module=//tools/:index.bzl
+--load_mapping=ng_module_bundle=//tools/:index.bzl
 
 # label mappings
 --label_mapping=rxjs/*=@npm//rxjs

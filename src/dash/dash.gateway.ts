@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MessageBody, SubscribeMessage, WebSocketGateway, WsResponse } from '@nestjs/websockets';
-import { EMPTY, from, Observable, concat } from 'rxjs';
+import { EMPTY, from, Observable, concat, of } from 'rxjs';
 import {
   debounceTime,
   map,
@@ -87,6 +87,18 @@ export class DashGateway {
 
     return concat(from(invocation.ref.fetched), invocation.fetched$)
       .pipe(map(fetched => BesEventFactory(EventType.FETCHED_EVENT, data.invocationId, fetched)));
+  }
+
+  @SubscribeMessage('subscribe/fileset')
+  onSubscribeToFilesets(@MessageBody() data: { invocationId: string }): Observable<WsResponse> {
+    const invocation = this.handler.queryFor(data.invocationId);
+
+    if (!invocation) {
+      return EMPTY;
+    }
+
+    return concat(of(invocation.ref.fileSets), invocation.fileSet$)
+      .pipe(map(filesets => BesEventFactory(EventType.FILE_SET_EVENT, data.invocationId, filesets)));
   }
 
   @SubscribeMessage('subscribe/invocations')

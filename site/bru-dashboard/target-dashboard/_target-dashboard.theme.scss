@@ -1,8 +1,12 @@
+@import './artifacts-list/artifacts-list.theme';
+
 @mixin app-target-dashboard-theme($theme) {
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
   $primary: map-get($theme, primary);
   $warn: map-get($theme, warn);
+
+  @include app-artifacts-list($theme);
 
   bru-target-dashboard {
     mat-list.mat-list.mat-list-base {

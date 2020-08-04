@@ -1,0 +1,14 @@
+@mixin app-artifacts-list($theme) {
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $warn: map-get($theme, warn);
+
+  bru-artifacts-list {
+    .bru-secondary {
+      color: mat-color($foreground, secondary-text);
+    }
+  }
+
+}
+

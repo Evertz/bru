@@ -8,5 +8,6 @@ sass_library(
         "//site/common/info-header:info-header_theme",
         "//site/common/status-bar:status-bar_theme",
         "//site/common/summary-bar:summary-bar_theme",
+        "//site/common/console-view:console-view_theme",
     ],
 )

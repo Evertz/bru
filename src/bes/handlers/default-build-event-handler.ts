@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 
 import { BuildEventHandler } from './invocation-handler';
-import { Invocation } from '../../../types/invocation-ref';
+import { FileSet, Invocation, OutputFile } from '../../../types/invocation-ref';
 import { StreamId } from '../../../types/messages/build-events';
 import { BuildEvent, TestSize, TestStatus } from '../../../types/messages/build-event-steam';
 
@@ -36,13 +36,47 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
     return true;
   }
 
+  handleNamedSet(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
+    const set = event.namedSetOfFiles;
+    const id = event.id.namedSet.id;
+
+    const files: OutputFile[] = set.files?.map(file => {
+      return {
+        location: this.stripUriPrefix(file.uri),
+        name: file.name,
+        prefix: file.pathPrefix
+      }
+    });
+
+    const refs = set.fileSets?.map(set => set.id);
+    const fileset = { files, refs }
+    invocation.ref.fileSets[id] = fileset;
+
+    const incoming = { [id]: fileset };
+    invocation.notifyFilesetChanged(incoming);
+
+    return true;
+  }
+
   handleTargetCompleted(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
     const target = invocation.ref.targets[event.id.targetCompleted.label];
     if (!target) { return false; }
 
     if (event.completed) {
-      target.success = event.completed.success;
+      const completed = event.completed;
+      target.success = completed.success;
       target.state = 'completed';
+
+      if (completed.outputGroup) {
+        const outputs: FileSet = {};
+
+        completed.outputGroup.forEach(output => {
+          outputs[output.name] = { refs: output.fileSets.map(fileSet => fileSet.id) }
+        });
+        if (Object.keys(outputs).length) {
+          target.outputs = outputs;
+        }
+      }
     } else if (event.aborted) {
       target.success = false;
       target.state = 'aborted';
@@ -84,6 +118,7 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
       return false;
     }
 
+    // TODO(mmackay): move support for multiple test runs to Bru from BES
     target.testResult = {
       status: TestStatus[event.testResult.status],
       duration: event.testResult.testAttemptDurationMillis.toNumber(),
@@ -93,6 +128,28 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
       attempt: event.id.testResult.attempt,
       run: event.id.testResult.run
     };
+
+    if (event.testResult.testActionOutput) {
+      const output = event.testResult.testActionOutput;
+      const testLog = output.find(out => out.name === 'test.log');
+      const testXML = output.find(out => out.name === 'test.xml');
+
+      if (testLog) {
+        target.testResult.log = {
+          name: testLog.name,
+          location: this.stripUriPrefix(testLog.uri),
+          prefix: testLog.pathPrefix
+        };
+      }
+
+      if (testXML) {
+        target.testResult.report = {
+          name: testXML.name,
+          location: this.stripUriPrefix(testXML.uri),
+          prefix: testXML.pathPrefix
+        };
+      }
+    }
 
     invocation.notifyTargetsChange({ [label]: target });
 
@@ -235,5 +292,25 @@ export class DefaultBuildEventHandler extends BuildEventHandler {
     invocation.notifyFetchedChanged(resource);
 
     return true;
+  }
+
+  private stripUriPrefix(uri: string): string {
+    const index = uri.indexOf('/blobs/');
+    return uri.substr(index);
+  }
+
+  /**
+   * Given a file set Id, returns a list of output files, optionally recursively resolved from that entrypoint id
+   */
+  private findAllFilesForInitialSet(id: string, invocation: Invocation, files: OutputFile[] = [], deep = false): OutputFile[] {
+    const fileSet = invocation.ref.fileSets[id];
+    if (fileSet) {
+      files = files.concat(fileSet.files);
+      if (fileSet.refs?.length && deep) {
+        fileSet.refs.forEach(ref => this.findAllFilesForInitialSet(ref, invocation, files, true));
+      }
+    }
+
+    return files;
   }
 }

@@ -1,0 +1,12 @@
+:host {
+  height: calc(100vh - 251px);
+  overflow: hidden;
+}
+
+mat-list-item {
+  height: 30px;
+}
+
+.bru-artifact-sha {
+  font-family: 'Roboto Mono', monospace;
+}

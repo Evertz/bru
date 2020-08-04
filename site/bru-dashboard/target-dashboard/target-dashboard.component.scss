@@ -12,3 +12,14 @@ mat-list.mat-list {
     margin-bottom: 12px;
   }
 }
+
+.bru-target-metadata-container {
+  height: calc(100vh - 251px);
+  overflow: auto;
+
+  h3.mat-subheader {
+    top: 0;
+    z-index: 10;
+    position: sticky;
+  }
+}

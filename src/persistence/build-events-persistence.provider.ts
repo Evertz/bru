@@ -4,14 +4,14 @@ import { BuildEvent } from '../../types/messages/build-event-steam';
 import { StreamId } from '../../types/messages/build-events';
 import { InvocationRef } from '../../types/invocation-ref';
 
-export const PERSISTENCE_PROVIDER_CONFIG = Symbol.for('PersistenceProviderConfig');
+export const BUILD_EVENTS_PERSISTENCE_CONFIG = Symbol.for('BuildEventsPersistenceConfig');
 
 /**
- * Provider class that provides an abstraction over the persistent storage used for invocation data
+ * Provider class that provides an abstraction over the persistent storage used for invocation data of build events
  * The caller should not have to handle storage implementations via this interface
  */
-export abstract class PersistenceProvider {
-  protected readonly logger: Logger = new Logger(PersistenceProvider.name);
+export abstract class BuildEventsPersistenceProvider {
+  protected readonly logger: Logger = new Logger(BuildEventsPersistenceProvider.name);
   protected readonly sessions: Set<string> = new Set();
 
   /**

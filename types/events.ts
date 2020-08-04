@@ -8,6 +8,7 @@ export const EventType = {
   COMMAND_LINE: 'commandline',
   FETCHED_EVENT: 'fetched',
   INVOCATIONS_EVENT: 'invocations',
+  FILE_SET_EVENT: 'fileset',
 };
 
 export interface BesEventData<T> {

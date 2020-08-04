@@ -3,6 +3,47 @@ import { filter, map } from 'rxjs/operators';
 import { BesEvent, BesEventFactory, EventType } from './events';
 
 /**
+ * Details for an output file that will be present in the CAS, which can be fetched from Bru
+ */
+export interface OutputFile {
+  /**
+   * The name of the file
+   */
+  name: string;
+
+  /**
+   * The files location in the CAS
+   */
+  location: string;
+
+  /**
+   * The files source prefix on disk
+   */
+  prefix?: string[];
+}
+
+/**
+ * Details for tracking a named set of files
+ */
+export interface FileSet {
+  /**
+   * Mapping the file set id to a list of output files
+   */
+  [id: string]: {
+    /**
+     * Files that are part of this set
+     */
+    files?: OutputFile[];
+
+    /**
+     * Other referenced file sets
+     */
+    refs?: string[];
+  }
+}
+
+
+/**
  * Details about the invocation
  */
 export interface InvocationDetails {
@@ -211,7 +252,22 @@ export interface Target {
      * If this result was pulled from a cache (local or remote)
      */
     cached: boolean;
+
+    /**
+     * The log file for this test invocation
+     */
+    log?: OutputFile;
+
+    /**
+     * The test.xml report for this file
+     */
+    report?: OutputFile;
   };
+
+  /**
+   * Outputs of this target associated with a particular output group
+   */
+  outputs?: FileSet;
 }
 
 /**
@@ -287,6 +343,11 @@ export interface InvocationRef {
    * Structured parsed bazel command line
    */
   canonicalStructuredCommandLine?: StructuredCommandLine;
+
+  /**
+   * A set of files that are referenced by the targets in this invocation
+   */
+  fileSets?: FileSet;
 }
 
 export class Invocation {
@@ -326,20 +387,10 @@ export class Invocation {
       },
       hostDetails: {},
       progress: [],
-      fetched: []
+      fetched: [],
+      fileSets: {}
     }
   };
-
-  /**
-   * The URL path to storage where the raw events can be fetched
-   */
-  getRawDataPath(): string {
-    return `${this.ref.streamId.invocationId}/events/raw.json`;
-  }
-
-  getLogDataPath(): string {
-    return `${this.ref.streamId.invocationId}/events/logs`;
-  }
 
   notifyStateChange() {
     this._notifyChange(EventType.STATE_EVENT);
@@ -371,6 +422,10 @@ export class Invocation {
 
   notifyFetchedChanged(fetched: FetchedResource) {
     this._notifyChange(EventType.FETCHED_EVENT, fetched);
+  }
+
+  notifyFilesetChanged(changed: FileSet) {
+    this._notifyChange(EventType.FILE_SET_EVENT, changed);
   }
 
   get changes$(): Observable<BesEvent<any>> {
@@ -412,6 +467,10 @@ export class Invocation {
 
   get fetched$(): Observable<FetchedResource> {
     return this._change$.pipe(this.select(EventType.FETCHED_EVENT));
+  }
+
+  get fileSet$(): Observable<FileSet> {
+    return this._change$.pipe(this.select(EventType.FILE_SET_EVENT));
   }
 
   private _notifyChange(event: string, payload?: any) {

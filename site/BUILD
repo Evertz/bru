@@ -35,6 +35,8 @@ ng_module(
         "//site/bru-dashboard/invocation-dashboard/invocation-log",
         "//site/bru-dashboard/invocation-dashboard/target-details",
         "//site/bru-dashboard/target-dashboard",
+        "//site/bru-dashboard/target-dashboard/test-log-view",
+        "//site/bru-dashboard/target-dashboard/artifacts-list",
         "//site/home",
         "@npm//@angular/flex-layout",
         "@npm//@angular/material",

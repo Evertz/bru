@@ -1,16 +1,1 @@
-<div class="bru-invocation-log">
-  <cdk-virtual-scroll-viewport itemSize="22" minBufferPx="400" maxBufferPx="600">
-    <table>
-      <tbody>
-        <ng-container *cdkVirtualFor="let line of log$ | async; let i = index;">
-          <tr class="bru-invocation-log-line"
-              [ngClass]="{ highlight: i === fragment }">
-            <td class="bru-invocation-log-gutter" [ngClass]="{ highlight: i === fragment }"
-                [routerLink]="['.']" [fragment]="''+ (i + 1)">{{ i + 1 }}</td>
-            <td class="bru-invocation-log-content" [innerHTML]="line"></td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </cdk-virtual-scroll-viewport>
-</div>
+<bru-console-view [data$]="log$" [line$]="line$"></bru-console-view>

@@ -20,7 +20,9 @@ import { InvocationDetailsModule } from './bru-dashboard/invocation-dashboard/in
 import { InvocationLogModule } from './bru-dashboard/invocation-dashboard/invocation-log/invocation-log.module';
 import { TargetDetailsModule } from './bru-dashboard/invocation-dashboard/target-details/target-details.module';
 import { TargetDashboardModule } from './bru-dashboard/target-dashboard/target-dashboard.module';
+import { TestLogViewModule } from './bru-dashboard/target-dashboard/test-log-view/test-log-view.module';
 import { HomeModule } from './home/home.module';
+import { ArtifactsListModule } from './bru-dashboard/target-dashboard/artifacts-list/artifacts-list.module';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { HomeModule } from './home/home.module';
     InvocationDetailsModule,
     InvocationLogModule,
     TargetDetailsModule,
-    TargetDashboardModule
+    TargetDashboardModule,
+    TestLogViewModule,
+    ArtifactsListModule
   ],
   bootstrap: [AppComponent]
 })

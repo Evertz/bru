@@ -1,17 +1,18 @@
 import { Controller, Inject } from '@nestjs/common';
 import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
+
 import { Observable, Subject } from 'rxjs';
 
-
-import { InvocationHandler, RegisteredHandlers } from './handlers/invocation-handler';
-import { BuildEventStreamProtoRoot } from './build-event-stream-proto-root';
+import { BuildEvent } from '../../types/messages/build-event-steam';
+import { StreamId } from '../../types/messages/build-events';
 import {
   PublishBuildEvent,
-  PublishBuildToolEventStreamRequest, PublishBuildToolEventStreamResponse,
+  PublishBuildToolEventStreamRequest,
+  PublishBuildToolEventStreamResponse,
   PublishLifecycleEventRequest
 } from '../../types/messages/publish-build-event';
-import { StreamId } from '../../types/messages/build-events';
-import { BuildEvent } from '../../types/messages/build-event-steam';
+import { BuildEventStreamProtoRoot } from './build-event-stream-proto-root';
+import { InvocationHandler, RegisteredHandlers } from './handlers/invocation-handler';
 
 @Controller()
 export class BesController implements PublishBuildEvent {

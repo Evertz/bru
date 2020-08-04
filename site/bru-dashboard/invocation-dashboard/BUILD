@@ -10,7 +10,6 @@ ng_module(
     theme = "_invocation-dashboard.theme.scss",
     theme_deps = [
         "//site/bru-dashboard/invocation-dashboard/invocation-details:invocation-details_theme",
-        "//site/bru-dashboard/invocation-dashboard/invocation-log:invocation-log_theme",
         "//site/bru-dashboard/invocation-dashboard/target-details:target-details_theme",
     ],
     visibility = ["//site:__subpackages__"],

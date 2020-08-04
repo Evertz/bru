@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import { Inject, Injectable } from '@nestjs/common';
 
-import { PersistenceProvider, PERSISTENCE_PROVIDER_CONFIG } from '../persistence.provider';
+import { BuildEventsPersistenceProvider, BUILD_EVENTS_PERSISTENCE_CONFIG } from '../build-events-persistence.provider';
 import { StreamId } from '../../../types/messages/build-events';
 import { BuildEvent } from '../../../types/messages/build-event-steam';
 import { InvocationRef } from '../../../types/invocation-ref';
@@ -13,8 +13,8 @@ export interface LocalFileProviderConfig {
 }
 
 @Injectable()
-export class LocalFilePersistenceProvider extends PersistenceProvider {
-  constructor(@Inject(PERSISTENCE_PROVIDER_CONFIG)
+export class LocalFilePersistenceProvider extends BuildEventsPersistenceProvider {
+  constructor(@Inject(BUILD_EVENTS_PERSISTENCE_CONFIG)
               private readonly config: LocalFileProviderConfig) {
     super();
   }

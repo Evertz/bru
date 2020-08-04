@@ -7,12 +7,20 @@ export const GRPC_OPTIONS: ClientOptions = {
   transport: Transport.GRPC,
   options: {
     url: '0.0.0.0:5000',
+    maxReceiveMessageLength: 1024 * 1024 * 50,
+    maxSendMessageLength: 1024 * 1024 * 50,
+    loader: {
+      includeDirs: [PROTO_ROOT]
+    },
     package: [
+      "build.bazel.remote.execution.v2",
       'build_event_stream',
+      'build.bazel.semver',
       'google.devtools.build.v1',
+      'google.bytestream',
       'command_line',
       'blaze.invocation_policy',
-      'options',
+      'options'
     ],
     protoPath: [
       'build_event_stream.proto',
@@ -23,7 +31,10 @@ export const GRPC_OPTIONS: ClientOptions = {
       'option_filters.proto',
       'duration.proto',
       'empty.proto',
-      'publish_build_event.proto'
+      'publish_build_event.proto',
+      'remote_execution.proto',
+      'semver.proto',
+      'google/bytestream/bytestream.proto'
     ].map(file => join(PROTO_ROOT, file))
   },
 };

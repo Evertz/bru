@@ -90,6 +90,16 @@ export abstract class BuildEventHandler {
   }
 
   /**
+   * Handles the Named Set Build Event
+   * @param invocation
+   * @param streamId
+   * @param event
+   */
+  handleNamedSet(invocation: Invocation, streamId: StreamId, event: BuildEvent): boolean {
+    return false;
+  }
+
+  /**
    * Handles the Build Finished Build Event
    * @param invocation
    * @param streamId
